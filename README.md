@@ -1,8 +1,8 @@
 <details>
-<summary>C Programming Language</summary>
+<summary><h1>C Programming Language</h1></summary>
 
 <details>
-<summary>Kiểu dữ liệu</summary>
+<summary><h2>Kiểu dữ liệu</h2></summary>
 
 - `uint8_t` = `unsigned char` là biến có 8 bit (ô nhớ), giá trị của biến này nằm trong khoảng từ $[0 \to (2^8-1)]$ hay $[0 \to 255]$
 - `int8_t` = `char` là biến có 8 bit (ô nhớ), giá trị của biến này nằm trong khoảng từ $[(-\frac{2^8}{2}) \to (\frac{2^8}{2}-1)]$ hay $[(-128) \to 127]$
@@ -17,7 +17,7 @@
 </details>
 
 <details>
-<summary>Typedef</summary>
+<summary><h2>Typedef</h2></summary>
 
 - Cú pháp: 
 ```c 
@@ -35,7 +35,7 @@ typeInt a = 10;      //= int a = 10;
 </details> 
 
 <details>
-<summary>Hàm</summary>
+<summary><h2>Hàm</h2></summary>
 
 - Cú pháp: 
 ```c
@@ -56,8 +56,9 @@ int tinhTong(int a, int b)
 - Hàm đơn giản cũng chỉ là 1 chương trình
 - Hàm được sử dụng khi cần lặp đi lặp lại 1 công việc giống nhau nhiều lần.
 </details>
+
 <details>
-<summary>Struct</summary>
+<summary><h2>Struct</h2></summary>
 
 - Cú pháp: 
 ```c
@@ -117,7 +118,10 @@ Output: `9.300000 20`
 </details>
 
 <details>
-<summary> Vòng lặp 'for()'</summary>
+<summary><h2>Vòng lặp</h2></summary>
+
+<details>
+<summary><h4>for()</h4></summary>
 
 - Cú pháp:
 ```c
@@ -153,7 +157,7 @@ Output: `0 1 2 3 4 5 6 7 8 9`
 </details>
 
 <details>
-<summary>Vòng lặp 'while()' </summary>
+<summary><h3>while()</h3></summary>
 
 - Cú pháp:
 ```c
@@ -186,7 +190,7 @@ Output: `0 1 2 3 4 5 6 7 8 9`
 </details>
 
 <details>
-<summary> Vòng lặp 'do-while()' </summary>
+<summary><h3>do - while()</h3></summary>
 
 - Cú pháp:
 ```c
@@ -217,7 +221,7 @@ Output: `10`
 </details>
 
 <details>
-<summary>Break</summary>
+<summary><h3>Break</h3></summary>
 
 - Cú pháp:
 ```c
@@ -236,7 +240,7 @@ Output: `0 1 2 3 4`
 </details>
 
 <details>
-<summary>Continue</summary>
+<summary><h3>Continue</h3></summary>
 
 - Cú pháp:
 ```c
@@ -253,9 +257,13 @@ for(int i=0; i<10; i++)
 Output: `0 1 2 3 4 6 7 8 9`
 - `continue` dùng để thoát ra khỏi vòng lặp hiện tại và thực hiện tiếp vòng lặp mới
 </details>
+</details>
 
 <details>
-<summary> Cấu trúc rẽ nhánh 'if() - else if() - else' </summary>
+<summary><h2>Cấu trúc rẽ nhánh</h2></summary>
+
+<details>
+<summary><h3>if() - else if() - else</h3></summary>
 
 - Cú pháp:
 ```c
@@ -305,7 +313,7 @@ Output: `10`
 </details>
 
 <details>
-<summary> Cấu trúc lựa chọn 'switch() - case' </summary>
+<summary><h3>switch() - case</h3></summary>
 
 - Cú pháp:
 ```c
@@ -353,9 +361,10 @@ Output: `1`
   - Trừ `default` mới không cần `break;`
   - Nếu không có `break;` thì chương trình sẽ bắt đầu chạy từ case đúng cho đến hết tất cả các lệnh của code block trong `switch() - case`
 </details>
+</details>
 
 <details>
-<summary>Enum</summary>
+<summary><h2>Enum</h2></summary>
 
 - Cú pháp:
 ```c
@@ -387,7 +396,10 @@ printf("%d\n", CN);   //Output: 11
 </details>
 
 <details>
-<summary>Pointer</summary>
+<summary><h2>Pointer</h2></summary>
+
+<details>
+<summary><h3>Pointer</h3></summary>
 
 - Cú pháp:
 ```c
@@ -457,7 +469,7 @@ Giá trị của biến a: 10
 </details>
 
 <details>
-<summary>Pointer NULL</summary>
+<summary><h3>Pointer NULL</h3></summary>
 
 - Vấn đề thực tế:
 ```c
@@ -518,7 +530,7 @@ Output:
 </details>
 
 <details>
-<summary>Function Pointer</summary>
+<summary><h3>Function Pointer</h3></summary>
 
 - Cú pháp:
 ```c
@@ -590,7 +602,7 @@ Output: `9 + 8 = 17`
 </details>
 
 <details>
-<summary>Array of Function Pointer</summary>
+<summary><h3>Array of Function Pointer</h3></summary>
 
 - Cú pháp:
 ```c
@@ -639,7 +651,7 @@ Output:
 </details>
 
 <details>
-<summary>Pointer to Pointer</summary>
+<summary><h3>Pointer to Pointer</h3></summary>
 
 - Cú pháp:
 ```c
@@ -658,19 +670,20 @@ int **ptrToPtr;
 </details>
 
 <details>
-<summary>Sizeof(Pointer)</summary>
+<summary><h3>Sizeof(Pointer)</h3></summary>
 
 - Kích thước của con trỏ phụ thuộc vào kiến trúc của vi xử lý
   - Kiến 64bit -> kích thước con trỏ = 8 bytes
   - Kiến 32bit -> kích thước con trỏ = 4 bytes
   - Kiến 16bit -> kích thước con trỏ = 2 bytes
 </details>
+</details>
 
 <details>
-<summary>Phân vùng nhớ</summary>
+<summary><h2>Phân vùng nhớ</h2></summary>
 
 - Phân vùng nhớ trên bộ nhớ RAM:
-<img src="https://imgur.com/a/JKkQYsL">
+![markdown](https://i.imgur.com/EH12v2c.png)
 </details>
 
 </details>
