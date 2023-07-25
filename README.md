@@ -2,7 +2,10 @@
 <summary><h1>C Programming Language</h1></summary>
 
 <details>
-<summary><h2>Kiểu dữ liệu</h2></summary>
+<summary><h2>C cơ bản</h2></summary>
+
+<details>
+<summary><h3>Kiểu dữ liệu</h3></summary>
 
 - `uint8_t` = `unsigned char` là biến có 8 bit (ô nhớ), giá trị của biến này nằm trong khoảng từ $[0 \to (2^8-1)]$ hay $[0 \to 255]$
 - `int8_t` = `char` là biến có 8 bit (ô nhớ), giá trị của biến này nằm trong khoảng từ $[(-\frac{2^8}{2}) \to (\frac{2^8}{2}-1)]$ hay $[(-128) \to 127]$
@@ -17,7 +20,7 @@
 </details>
 
 <details>
-<summary><h2>Typedef</h2></summary>
+<summary><h3>Typedef</h3></summary>
 
 - Cú pháp: 
 ```c 
@@ -35,7 +38,7 @@ typeInt a = 10;      //= int a = 10;
 </details> 
 
 <details>
-<summary><h2>Hàm</h2></summary>
+<summary><h3>Hàm</h3></summary>
 
 - Cú pháp: 
 ```c
@@ -58,7 +61,7 @@ int tinhTong(int a, int b)
 </details>
 
 <details>
-<summary><h2>Struct</h2></summary>
+<summary><h3>Struct</h3></summary>
 
 - Cú pháp: 
 ```c
@@ -118,7 +121,7 @@ Output: `9.300000 20`
 </details>
 
 <details>
-<summary><h2>Vòng lặp</h2></summary>
+<summary><h3>Vòng lặp</h3></summary>
 
 <details>
 <summary><h4>for()</h4></summary>
@@ -157,7 +160,7 @@ Output: `0 1 2 3 4 5 6 7 8 9`
 </details>
 
 <details>
-<summary><h3>while()</h3></summary>
+<summary><h4>while()</h4></summary>
 
 - Cú pháp:
 ```c
@@ -190,7 +193,7 @@ Output: `0 1 2 3 4 5 6 7 8 9`
 </details>
 
 <details>
-<summary><h3>do - while()</h3></summary>
+<summary><h4>do - while()</h4></summary>
 
 - Cú pháp:
 ```c
@@ -221,7 +224,7 @@ Output: `10`
 </details>
 
 <details>
-<summary><h3>Break</h3></summary>
+<summary><h4>Break</h4></summary>
 
 - Cú pháp:
 ```c
@@ -240,7 +243,7 @@ Output: `0 1 2 3 4`
 </details>
 
 <details>
-<summary><h3>Continue</h3></summary>
+<summary><h4>Continue</h4></summary>
 
 - Cú pháp:
 ```c
@@ -260,10 +263,10 @@ Output: `0 1 2 3 4 6 7 8 9`
 </details>
 
 <details>
-<summary><h2>Cấu trúc rẽ nhánh</h2></summary>
+<summary><h3>Cấu trúc rẽ nhánh</h3></summary>
 
 <details>
-<summary><h3>if() - else if() - else</h3></summary>
+<summary><h4>if() - else if() - else</h4></summary>
 
 - Cú pháp:
 ```c
@@ -313,7 +316,7 @@ Output: `10`
 </details>
 
 <details>
-<summary><h3>switch() - case</h3></summary>
+<summary><h4>switch() - case</h4></summary>
 
 - Cú pháp:
 ```c
@@ -364,7 +367,7 @@ Output: `1`
 </details>
 
 <details>
-<summary><h2>Enum</h2></summary>
+<summary><h3>Enum</h3></summary>
 
 - Cú pháp:
 ```c
@@ -394,12 +397,13 @@ printf("%d\n", CN);   //Output: 11
 - Ta cũng có thể gán giá trị cho từng phần từ bằng toán tử `=` trong khai báo `enum`
 - Lúc đó, những phần tử theo sau phần tử được gán giá trị sẽ được tăng thêm 1 so với phần tử trước nó (ví dụ ở trên).
 </details>
+</details>
 
 <details>
 <summary><h2>Pointer</h2></summary>
 
 <details>
-<summary><h3>Pointer</h3></summary>
+<summary><h4>Pointer</h4></summary>
 
 - Cú pháp:
 ```c
@@ -469,7 +473,7 @@ Giá trị của biến a: 10
 </details>
 
 <details>
-<summary><h3>Pointer NULL</h3></summary>
+<summary><h4>Pointer NULL</h4></summary>
 
 - Vấn đề thực tế:
 ```c
@@ -530,7 +534,7 @@ Output:
 </details>
 
 <details>
-<summary><h3>Function Pointer</h3></summary>
+<summary><h4>Function Pointer</h4></summary>
 
 - Cú pháp:
 ```c
@@ -602,7 +606,7 @@ Output: `9 + 8 = 17`
 </details>
 
 <details>
-<summary><h3>Array of Function Pointer</h3></summary>
+<summary><h4>Array of Function Pointer</h4></summary>
 
 - Cú pháp:
 ```c
@@ -651,7 +655,7 @@ Output:
 </details>
 
 <details>
-<summary><h3>Pointer to Pointer</h3></summary>
+<summary><h4>Pointer to Pointer</h4></summary>
 
 - Cú pháp:
 ```c
@@ -670,7 +674,7 @@ int **ptrToPtr;
 </details>
 
 <details>
-<summary><h3>Sizeof(Pointer)</h3></summary>
+<summary><h4>Sizeof(Pointer)</h4></summary>
 
 - Kích thước của con trỏ phụ thuộc vào kiến trúc của vi xử lý
   - Kiến 64bit -> kích thước con trỏ = 8 bytes
@@ -679,11 +683,239 @@ int **ptrToPtr;
 </details>
 </details>
 
+
 <details>
 <summary><h2>Phân vùng nhớ</h2></summary>
 
-- Phân vùng nhớ trên bộ nhớ RAM:
+- **Phân vùng nhớ trên bộ nhớ RAM:**
 ![markdown](https://i.imgur.com/EH12v2c.png)
+- Khi chương trình được nạp vào vi xử lý thì sẽ được lưu vào phân vùng flash (khi tắt nguồn thì flash vẫn lưu thông tin)
+- Khi chạy chương trình thì sẽ copy source code để đổ sang RAM
+- Tại vì tốc độ truy xuất ở RAM sẽ nhanh hơn Flash
+- Ưu điểm Flash: lưu dữ liệu được dù có tắt nguồn
+- Nhược điểm Flash: tốc độ truy xuất rất chậm
+- Ưu điểm RAM: tốc độ truy xuất rất chậm
+- Nhược điểm RAM: dữ liệu bị xóa sau khi tắt nguồn (mất hết data)
+- **Text:**
+  - Khi chạy một chương trình thì sẽ copy câu lệnh từ bộ nhớ Flash sang bộ nhớ RAM và được lưu ở phân vùng Text.
+  - Quyền truy cập chỉ Read và nó chưa lệnh để thực thi nên tránh sửa đổi instruction.
+  - Chứa khai báo hằng số trong chương trình (.rodata)
+- **Data:**
+  - Quyền truy cập là read-write.
+  - Chứa biến toàn cục or biến static với giá trị khởi tạo khác không.
+  - Được giải phóng khi kết thúc chương trình.
+- **Bss:**
+  - Quyền truy cập là read-write.
+  - Chứa biến toàn cục or biến static với giá trị khởi tạo bằng không or không khởi tạo.
+  - Được giải phóng khi kết thúc chương trình.
+- **Stack:**
+  - Quyền truy cập là read-write.
+  - Được sử dụng cấp phát cho biến local, input parameter của hàm,…
+  - Sẽ được giải phóng khi ra khỏi block code/hàm
+- **Heap:**
+  - Quyền truy cập là read-write.
+  - Được sử dụng để cấp phát bộ nhớ động như: Malloc, Calloc, Realloc…
+  - Sẽ được giải phóng khi gọi hàm free,…
+
+</details>
+
+<details>
+<summary><h2>Cấp phát động</h2></summary>
+
+- Cấp phát động là cấp phát bộ nhớ trong quá trình chạy chương trình.
+- Cấp phát động có cấp các địa chỉ bộ nhớ không cần liền kề nhau.
+- Có 3 hàm thường dùng trong cấp phát động là: `Malloc()`, `Calloc()`, `Realloc()`.
+- Vùng nhớ chỉ được giải phóng khi gọi hàm `free()`.
+- Cú pháp hàm `Malloc()`:
+```c
+void *malloc(<Kích thước bộ nhớ cần cấp (byte)>);
+```
+- Ví dụ cho việc sử dụng hàm `Malloc()`:
+```c
+int *ptr = (int *)malloc(10 * sizeof(int));
+free(ptr);
+```
+- Trong đó:
+  - `int *ptr` tạo ra con trỏ để chứa vùng nhớ sau khi cấp phát động.
+  - `(int *)` ép hàm `malloc()` từ kiểu `void *` về kiểu `int *`.
+  - `10` số lượng phần tử muốn cấp.
+  - `sizeof(int)` kích thước (byte) của 1 biến kiểu int.
+  - `(10*sizeof(int))` kích thước (byte) của 10 phần tử kiểu int.
+  - `free(ptr)` giải phóng vùng nhớ sau khi cấp phát động.
+
+- Cú pháp hàm `Calloc()`:
+```c
+void *calloc(<số lượng thành viên>, <Kích thước của kiểu dữ liệu thành viên>);
+```
+- Ví dụ cho việc sử dụng hàm `Calloc()`:
+```c
+int *ptr = (int *)calloc(10, sizeof(int));
+free(ptr);
+```
+- Trong đó:
+  - `int *ptr` tạo ra con trỏ để chứa vùng nhớ sau khi cấp phát động.
+  - `(int *)` ép hàm `calloc()` từ kiểu `void *` về kiểu `int *`.
+  - `10` số lượng phần tử muốn cấp.
+  - `sizeof(int)` kích thước (byte) của 1 biến kiểu int.
+  - `free(ptr)` giải phóng vùng nhớ sau khi cấp phát động.
+
+- Cú pháp hàm `Realloc()`:
+```c
+void *realloc(<Địa chỉ ô nhớ muốn thay đổi giá trị>, <Kích thước dữ liệu mới>);
+```
+- Ví dụ cho việc sử dụng hàm `Calloc()`:
+```c
+int *ptr = (int *)malloc(10*sizeof(int));
+ptr = (int *)realloc(ptr, 15*sizeof(int));
+free(ptr);
+```
+- Trong đó:
+  - `int *ptr` tạo ra con trỏ để chứa vùng nhớ sau khi cấp phát động.
+  - `(int *)` ép hàm `realloc()` từ kiểu `void *` về kiểu `int *`.
+  - `10` hay `15` là số lượng phần tử muốn cấp.
+  - `sizeof(int)` kích thước (byte) của 1 biến kiểu int.
+  - `free(ptr)` giải phóng vùng nhớ sau khi cấp phát động.
+</details>
+<!-- -----------------------------------Bien------------------------------------------ -->
+<details>
+<summary><h2>Biến</h2></summary>
+
+<details>
+<summary><h3>Extern</h3></summary>
+
+- Biến `extern` được sử dụng khi cần gọi biến hay hàm từ các file khác nhau.
+- Biến `extern` bản chất là thông báo cho chương trình biết có thể sử dụng biến này từ file này sang file khác.
+- Biến `extern` chỉ cần khai báo 1 lần ở 1 file duy nhất sau đó sử dụng như 1 biến global bình thường ở tất cả các file.
+- ***Lưu ý:*** khi khai báo biến `extern` **không được gán giá trị** cho biến.
+- Ví dụ:
+```c
+extern int a = 10; // lỗi
+
+extern int b;
+b = 10; //hợp lệ
+```
+</details>
+
+<details>
+<summary><h3>Static</h3></summary>
+
+Biến `static` có hai loại đó là `static toàn cục` và `static cục bộ`:
+`Static cục bộ` 
+- Biến `static `sẽ được lưu vào phân vùng nhớ data nên biến static sẽ được lưu hết vòng đời của chương trình.
+- Vậy nên dù có ra khỏi code block thì biến `static cục bộ` vẫn giữ nguyên giá trị trước đó là không bị reset như những biến bình thường.
+- Ví dụ:
+```c
+#include <stdio.h>
+
+void testNormal()
+{
+    int n = 10;
+    printf("Normal n = %d\n", n);
+    n++;
+}
+
+void testStatic()
+{
+    static int s = 10;
+    printf("Static s = %d\n\n", s);
+    s++;
+}
+
+int main()
+{
+    printf("Goi lan 1\n");
+    testNormal();
+    testStatic();
+    printf("Goi lan 2\n");
+    testNormal();
+    testStatic();
+    printf("Goi lan 3\n");
+    testNormal();
+    testStatic();
+    return 0;
+}
+```
+Output:
+```c
+Goi lan 1
+Normal n = 10
+Static s = 10
+
+Goi lan 2
+Normal n = 10
+Static s = 11
+
+Goi lan 3
+Normal n = 10
+Static s = 12
+```
+`Static toàn cục` 
+- Biến `Static toàn cục` sẽ chỉ được sử dụng trong file chứa nó.
+- Biến `Static toàn cục` **không thể** gọi qua file khác bằng bất cứ cách nào. Dù có sử dụng từ khóa `extern` hay `#include<thư viện>` cũng không lấy được.
+- Biến `Static toàn cục` được sử dụng khi hàm hay biến chỉ được phép sử dụng nội bộ trong file. Người code không muốn người khác lấy dữ liệu biến đó ra ngoài file.
+</details>
+
+<details>
+<summary><h3>Volatile</h3></summary>
+
+- Khi chạy chế độ optimize thì compiler sẽ xóa bớt những dòng lệnh giống nhau nhưng lặp lại quá nhiều lần.
+- Điều này khiến chương trình dễ sai. Nhất là khi có ngắt trong hệ thống.
+- Biến `volatile` được tạo ra để khắc phục vấn đề này.
+- Biến `volatile` được sử dụng khi **không** muốn tối ưu biến khi chạy chế độ optimize.
+- Khi đó toàn bộ chương trình sẽ được compiler optimize trừ những biến có khai báo từ khóa optimize.
+- Ví dụ:
+```c
+volatile int a; //chương trình sẽ không tối ưu biến a
+```
+</details>
+
+<details>
+<summary><h3>Register</h3></summary>
+
+- Khi chạy chương trình thì RAM sẽ gửi dữ liệu cho thanh ghi (register), sau đó thanh ghi mới chuyển dữ liệu đó vào bộ xử lý trung tâm để thực hiện việc tính toán.
+- Điều này khiến cho chương trình mất rất nhiều thời gian vì phải truyền dữ liệu qua lại giữa: RAM, Register và ALU (bộ xử lý trung tâm).
+- Vì vậy biến `register` được tạo ra với mục đích tối ưu tốc độ chương trình.
+- Biến `register` được lưu trực tiếp trên thanh ghi, từ đó giảm đường truyền xuống chỉ còn truyền giữa: Register và ALU.
+- Vậy nên biến `register` có thể tối ưu tốc độ của chương trình.
+- Ví dụ:
+```c
+register int a;
+```
+- Lưu ý:
+  - Biến `register` không bị giới hạn khai báo số lượng biến tối đa. 
+  - Nhưng thanh ghi là có hạn. Nếu khai báo quá nhiều thì biến `register` sẽ lưu tạm trên RAM từ đó làm giảm đi tốc của chương trình.
+  - Biến `register` không có địa chỉ vì biến `register` không nằm trên RAM nên không có địa chỉ.
+</details>
+
+</details>
+<!-- ----------------------------------Macro-------------------------------------------- -->
+<!-- <details>
+<summary><h2>Marcro</h2></summary>
+- Cú pháp: 
+```c
+#define PI 3.14
+```
+- Macro đơn giản là thay thế
+</details> -->
+<!-- ----------------------------------Function------------------------------------------ -->
+<details>
+<summary><h2>Function</h2></summary>
+
+- Cách hoạt động: có địa chỉ để lưu giữ hàm:
+  - Đầu tiên chương trình sẽ chạy các lệnh một cách tuần tự từ địa chỉ thấp đến địa chỉ cao.
+  - Khi gặp phải hàm thì `Stack Pointer` sẽ lưu địa chỉ tiếp theo của dòng lệnh trước khi vào hàm.
+  - Sau đó `Program Counter` sẽ chạy từ địa chỉ đầu tiên đến địa chỉ kết thúc của hàm.
+  - Sau đó `Program Pointer` sẽ lấy địa chỉ đã lưu của `Stack Pointer` từ đó chạy tiếp chương trình.
+
+
+- Khi mở nguồn sẽ vào địa chỉ 0x00 khởi tạo program counter -> stack pointer
+- 
+- Program counter: bộ đếm (chỉ đếm và đọc giá trị) lấy giá trị hiện tại +4 và đọc giá trị
+- Stack pointer: bố nhớ để lưu địa chỉ
+- Khi bắt đầu CT sẽ chạy từ 0x00 cho đến khi gặp hàm - lưu địa chỉ kế tiếp vào stack pointer - program counter lấy địa chỉ của hàm và chạy lệnh của hàm cho đến khi kết thúc CT
+
+- 
+
 </details>
 
 </details>
