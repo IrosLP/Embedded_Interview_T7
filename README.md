@@ -1003,19 +1003,14 @@ printf("không có dòng vi điều khiển phù hợp");
 <details>
 <summary><h2>Function</h2></summary>
 
-- Cách hoạt động: có địa chỉ để lưu giữ hàm:
+- Khi mở nguồn sẽ vào địa chỉ 0x00 khởi tạo program counter -> stack pointer
+- Program counter: bộ đếm (chỉ đếm và đọc giá trị) lấy giá trị hiện tại tăng 4 ô nhớ và đọc giá trị
+- Stack pointer: bộ nhớ để lưu địa chỉ.
+- Cách hoạt động:
   - Đầu tiên chương trình sẽ chạy các lệnh một cách tuần tự từ địa chỉ thấp đến địa chỉ cao.
   - Khi gặp phải hàm thì `Stack Pointer` sẽ lưu địa chỉ tiếp theo của dòng lệnh trước khi vào hàm.
   - Sau đó `Program Counter` sẽ chạy từ địa chỉ đầu tiên đến địa chỉ kết thúc của hàm.
-  - Sau đó `Program Pointer` sẽ lấy địa chỉ đã lưu của `Stack Pointer` từ đó chạy tiếp chương trình.
-
-
-- Khi mở nguồn sẽ vào địa chỉ 0x00 khởi tạo program counter -> stack pointer
-- 
-- Program counter: bộ đếm (chỉ đếm và đọc giá trị) lấy giá trị hiện tại +4 và đọc giá trị
-- Stack pointer: bố nhớ để lưu địa chỉ
-- Khi bắt đầu CT sẽ chạy từ 0x00 cho đến khi gặp hàm - lưu địa chỉ kế tiếp vào stack pointer - program counter lấy địa chỉ của hàm và chạy lệnh của hàm cho đến khi kết thúc CT
-
+  - Sau đó `Program Pointer` sẽ lấy địa chỉ đã lưu của `Stack Pointer` (địa chỉ tiếp theo của dòng lệnh trước khi chạy vào hàm) từ đó chạy tiếp chương trình.
+  - Thực hiện lặp lại như vậy cho đến khi kết thúc chương trình.
 </details>
-
 </details>
