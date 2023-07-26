@@ -890,7 +890,7 @@ register int a;
 - Lưu ý:
   - Biến `register` không bị giới hạn khai báo số lượng biến tối đa. 
   - Nhưng thanh ghi là có hạn. Nếu khai báo quá nhiều thì biến `register` sẽ lưu tạm trên RAM từ đó làm giảm đi tốc của chương trình.
-  - Biến `register` không có địa chỉ vì biến `register` không nằm trên RAM nên không có địa chỉ.
+  - Biến `register` không có địa chỉ vì biến `register` không nằm trên RAM.
 </details>
 
 </details>
