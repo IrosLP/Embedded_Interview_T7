@@ -939,6 +939,78 @@ Size sinhVien1: 32
 Size sinhVien2: 24
 ```
 </details>
+<!-- ----------------------------------Union-------------------------------------------- -->
+<details>
+<summary><h2>Union</h2></summary>
+
+- Cú pháp:
+```c
+union <tên union>{
+  //kiểu dữ liệu1    tên biến1
+  //kiểu dữ liệu2    tên biến2...
+};
+```
+- Union cũng tương tự như Struct là kiểu dữ liệu do người dùng tự định danh.
+- Union cũng bao gồm nhiều biến có nhiều kiểu dữ liệu khác nhau như Struct.
+- Tuy nhiên Union khác Struct ở một điểm đó là tất cả các biến của Union đều có chung một địa chỉ.
+- Kích thước của Union bằng bội số của biến thành viên có kích thước lớn nhất.
+- Một lần quét dữ liệu của Union cũng sẽ do kiến trúc của vi xử lý quyết định.
+- Ví dụ:
+```c
+#include <stdio.h>
+
+union sinhVien{
+  int maSV;
+  int tuoi;
+  char TenSV[5];
+  double diemTB;
+};
+
+int main()
+{
+    printf("Size sinhVien: %d\n", sizeof(union sinhVien));
+    return 0;
+}
+```
+Output:
+`Size sinhVien: 8`
+- Vì union sử dụng chung 1 địa chỉ và 1 vùng nhớ duy nhất cho tất cả các biến nên union chỉ được sử dụng khi những biến thành viên không đồng thời cùng tồn tại.
+- Ví dụ:
+```c
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+
+typedef union{
+    struct{
+        uint8_t id[1];
+        uint8_t data[4];
+        uint8_t checkSum[1];
+    }object;
+    uint8_t array[6];
+}dataFrame;
+
+int main()
+{
+    dataFrame frame1;
+    frame1.object.id[0] = 1;
+    frame1.object.data[0] = 0;
+    frame1.object.data[1] = 1;
+    frame1.object.data[2] = 2;
+    frame1.object.data[3] = 3;
+    frame1.object.checkSum[0] = 8;
+    for(int i=0; i<6; i++)
+    {
+        printf("%d ",frame1.array[i]);
+    }
+    return 0;
+}
+```
+Output: `1 0 1 2 3 8`
+- Chương trình trên để nhập dữ liệu vào frame dữ liệu để có thể truyền đi một cách dễ dàng.
+- Những thành phần trong Struct của đoạn chương trình ở phía trên đó là những thành phần của data frame.
+- Array chính là data frame đã được liên kết hoàn chỉnh.
+</details>
 <!-- ----------------------------------Macro-------------------------------------------- -->
 <details>
 <summary><h2>Marcro</h2></summary>
