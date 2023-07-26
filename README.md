@@ -1054,28 +1054,56 @@ Output: `1 0 1 2 3 8`
 - Macro được dùng để viết thư viện cho các dòng vi điều khiển để có thể chỉ sử dụng 1 chương trình mà vẫn có thể nạp cho nhiều dòng vi điều khiển khác nhau.
 - Ví dụ sử dụng để định nghĩa cho biến:
 ```c
+#include <stdio.h>
+
 #define PI 3.14
+
+int main()
+{
+    printf("So pi = %f", PI);
+    return 0;
+}
 ```
 - Ví dụ sử dụng để định nghĩa cho if-else:
 ```c
+#include <stdio.h>
+
 #define SIZE 20
-#if SIZE > 20
-printf("size lớn hơn 20");
 
-#elif SIZE == 20
-printf("size bằng 20");
+int main()
+{
+    #if SIZE > 20
+    printf("size lon hon 20");
 
-#else
-printf("size nhỏ hơn 20");
-#endif
+    #elif SIZE == 20
+    printf("size bang 20");
+
+    #else
+    printf("size nho hon 20");
+    #endif
+    return 0;
+}
 ```
-- Ví dụ sử dụng để định nghĩa cho biến:
+- Ví dụ sử dụng để định nghĩa cho hàm:
 ```c
-#define CREATE_FUNC(func_name, cmd) /
-void func_name(){                   /
-    printf(cmd);
-    //hoặc nếu muốn cho macro tự hiểu cmd là chuỗi thì ta dùng dấu '#'
-    //printf(#cmd);
+#include <stdio.h>
+#include <stdint.h>
+
+#define CREATE_FUNC(func_name, cmd) \
+void func_name()                    \
+{                                   \
+    printf(cmd);                    \
+}
+//hoặc nếu muốn cho macro tự hiểu cmd là chuỗi thì ta dùng dấu '#'
+//printf(#cmd);
+CREATE_FUNC(Func1, "Func1: abc\n");
+CREATE_FUNC(Func2, "Func2: xyz\n");
+
+int main()
+{
+    Func1();
+    Func2();
+    return 0;
 }
 ```
 - Ví dụ sử dụng để định nghĩa cho thư viện:
