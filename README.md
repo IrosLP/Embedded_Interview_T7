@@ -1,6 +1,6 @@
 <details>
 <summary><h1>C Programming Language</h1></summary>
-
+<!-- ----------------------------------C Bassic-------------------------------------------- -->
 <details>
 <summary><h2>C cơ bản</h2></summary>
 
@@ -398,9 +398,9 @@ printf("%d\n", CN);   //Output: 11
 - Lúc đó, những phần tử theo sau phần tử được gán giá trị sẽ được tăng thêm 1 so với phần tử trước nó (ví dụ ở trên).
 </details>
 </details>
-
+<!-- ----------------------------------Pointer-------------------------------------------- -->
 <details>
-<summary><h2>Pointer</h2></summary>
+<summary><h2>Con trỏ</h2></summary>
 
 <details>
 <summary><h4>Pointer</h4></summary>
@@ -683,7 +683,7 @@ int **ptrToPtr;
 </details>
 </details>
 
-
+<!-- ----------------------------------Phan Vung Nho---------------------------------------- -->
 <details>
 <summary><h2>Phân vùng nhớ</h2></summary>
 
@@ -717,14 +717,14 @@ int **ptrToPtr;
   - Được sử dụng để cấp phát bộ nhớ động như: Malloc, Calloc, Realloc…
   - Sẽ được giải phóng khi gọi hàm free,…
 
-</details>
-
 <details>
-<summary><h2>Cấp phát động</h2></summary>
+<summary><h3>Cấp phát động</h3></summary>
 
 - Cấp phát động là cấp phát bộ nhớ trong quá trình chạy chương trình.
 - Cấp phát động có cấp các địa chỉ bộ nhớ không cần liền kề nhau.
 - Có 3 hàm thường dùng trong cấp phát động là: `Malloc()`, `Calloc()`, `Realloc()`.
+- `Malloc()` và `Calloc()` là hai hàm dùng để cấp phát bộ nhớ động.
+- `Realloc()`dùng để thay đổi kích thước của phần tử đã được cấp vùng nhớ động.
 - Vùng nhớ chỉ được giải phóng khi gọi hàm `free()`.
 - Cú pháp hàm `Malloc()`:
 ```c
@@ -761,20 +761,20 @@ free(ptr);
 
 - Cú pháp hàm `Realloc()`:
 ```c
-void *realloc(<Địa chỉ ô nhớ muốn thay đổi giá trị>, <Kích thước dữ liệu mới>);
+void *realloc(<Con trỏ đã được cấp phát bộ nhớ động trước đó>, <Kích thước dữ liệu mới>);
 ```
-- Ví dụ cho việc sử dụng hàm `Calloc()`:
+- Ví dụ cho việc sử dụng hàm `Realloc()`:
 ```c
 int *ptr = (int *)malloc(10*sizeof(int));
 ptr = (int *)realloc(ptr, 15*sizeof(int));
 free(ptr);
 ```
 - Trong đó:
-  - `int *ptr` tạo ra con trỏ để chứa vùng nhớ sau khi cấp phát động.
+  - `ptr` con trỏ muốn thay đổi kích thước cấp phát động.
   - `(int *)` ép hàm `realloc()` từ kiểu `void *` về kiểu `int *`.
-  - `10` hay `15` là số lượng phần tử muốn cấp.
-  - `sizeof(int)` kích thước (byte) của 1 biến kiểu int.
+  - `15 * sizeof(int)` là kích thước dữ liệu mới.
   - `free(ptr)` giải phóng vùng nhớ sau khi cấp phát động.
+</details>
 </details>
 <!-- -----------------------------------Bien------------------------------------------ -->
 <details>
@@ -799,7 +799,7 @@ b = 10; //hợp lệ
 <details>
 <summary><h3>Static</h3></summary>
 
-Biến `static` có hai loại đó là `static toàn cục` và `static cục bộ`:
+Biến `static` có hai loại đó là `static toàn cục` và `static cục bộ`:<br>
 `Static cục bộ` 
 - Biến `static `sẽ được lưu vào phân vùng nhớ data nên biến static sẽ được lưu hết vòng đời của chương trình.
 - Vậy nên dù có ra khỏi code block thì biến `static cục bộ` vẫn giữ nguyên giá trị trước đó là không bị reset như những biến bình thường.
@@ -974,7 +974,7 @@ int main()
 ```
 Output:
 `Size sinhVien: 8`
-- Vì union sử dụng chung 1 địa chỉ và 1 vùng nhớ duy nhất cho tất cả các biến nên union chỉ được sử dụng khi những biến thành viên không đồng thời cùng tồn tại.
+- Vì union sử dụng chung 1 địa chỉ và 1 vùng nhớ duy nhất cho tất cả các biến nên union chỉ được sử dụng khi những biến thành viên không đồng thời cùng tồn tại hoặc muốn ghi và kiểm soát từng giá trị khi truyền vào một vùng nhớ nào đó.
 - Ví dụ:
 ```c
 #include <stdio.h>
