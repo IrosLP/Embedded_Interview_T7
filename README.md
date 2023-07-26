@@ -1011,6 +1011,37 @@ Output: `1 0 1 2 3 8`
 - Những thành phần trong Struct của đoạn chương trình ở phía trên đó là những thành phần của data frame.
 - Array chính là data frame đã được liên kết hoàn chỉnh.
 </details>
+<!-- ----------------------------------Compiler-------------------------------------------- -->
+<details>
+<summary><h2>Compiler</h2></summary>
+
+- Compiler là quá trình biên dịch từ ngôn ngữ bậc cao sang mã máy.
+- Compiler có 4 quá trình chính:
+  - Tiền xử lý (Pre-processor)
+  - Compiler.
+  - Assembler.
+  - Linker.
+![Compiler](https://i0.wp.com/tapit.vn/wp-content/uploads/2017/07/GCC_CompilationProcess.png?zoom=2)
+
+1. Giai đoạn tiền xử lý – Preprocessor
+- Nhận mã nguồn
+- Xóa bỏ tất cả chú thích, comments của chương trình
+- Chỉ thị tiền xử lý (bắt đầu bằng #) cũng được xử lý
+- Ví dụ: chỉ thị #include cho phép ghép thêm mã chương trình của một tệp tiêu để vào mã nguồn cần dịch. Các hằng số được định nghĩa bằng #define sẽ được thay thế bằng giá trị cụ thể tại mỗi nơi sử dụng trong chương trình.
+2. Cộng đoạn dịch Ngôn Ngữ Bậc Cao sang Assembly
+- Phân tích cú pháp (syntax) của mã nguồn NNBC
+-	Chuyển chúng sang dạng mã Assembly là một ngôn ngữ bậc thấp (hợp ngữ) gần với tập lệnh của bộ vi xử lý.
+3. Công đoạn dịch Assembly
+-	Dich chương trình => Sang mã máy 0 và 1
+-	Một tệp mã máy (.obj) sinh ra trong hệ thống sau đó.
+4. Giai đoạn Linker
+-	Trong giai đoạn này mã máy của một chương trình dịch từ nhiều nguồn (file .c hoặc file thư viện .lib) được liên kết lại với nhau để tạo thành chương trình đích duy nhất
+-	Mã máy của các hàm thư viện gọi trong chương trình cũng được đưa vào chương trình cuối trong giai đoạn này.
+-	Chính vì vậy mà các lỗi liên quan đến việc gọi hàm hay sử dụng biến tổng thể mà không tồn tại sẽ bị phát hiện. Kể cả lỗi viết chương trình chính không có hàm main() cũng được phát hiện trong liên kết.
+- Kết thúc quá trình tất cả các đối tượng được liên kết lại với nhau thành một chương trình có thể thực thi được (executable hay .exe) thống nhất.
+
+
+</details>
 <!-- ----------------------------------Macro-------------------------------------------- -->
 <details>
 <summary><h2>Marcro</h2></summary>
