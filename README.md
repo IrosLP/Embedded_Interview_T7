@@ -413,28 +413,37 @@ printf("%d\n", CN);   //Output: 11
 ```c
 int *ptr;
 ```
-- Sử dụng:
-```c
-int a = 10;
-int *ptr = &a;
-printf("Địa chỉ của ptr: %p\n", &ptr);
-printf("Giá trị của ptr: %p\n", ptr);
-printf("Giá trị mà con trỏ ptr trỏ tới: %d\n", *ptr);
-printf("Địa của biến a: %p\n", &a);
-printf("Giá trị của biến a: %d\n", a);
-```
-Output: 
-```c
-Địa chỉ của ptr: 0x7ffebeaeb7c0
-Giá trị của ptr: 0x7ffebeaeb7bc
-Giá trị mà con trỏ ptr trỏ tới: 10
-Địa của biến a: 0x7ffebeaeb7bc
-Giá trị của biến a: 10
-```
 - Con trỏ (Pointer) có 3 giá trị chính là: `&ptr`, `ptr` và `*ptr`.
 - `&ptr` là địa chỉ của con trỏ.
 - `ptr` là giá trị của con trỏ = địa chỉ của biến mà con trỏ trỏ tới.
 - `*ptr` là giá trị của biến mà con trỏ trỏ tới.
+- Sử dụng:
+```c
+#include <stdio.h>
+
+int main()
+{
+    int a = 10;
+    int *ptr = &a;
+
+    printf("Dia chi cua ptr _ &ptr = %p\n", &ptr);
+    printf("Gia tri cua ptr _ ptr = %p\n", ptr);
+    printf("Gia tri ma con tro ptr tro toi _ *ptr = %d\n", *ptr);
+    printf("Dia chi cua bien a _ &a = %p\n", &a);
+    printf("Gia tri cua bien a _ a = %d\n", a);
+
+    return 0;
+}
+```
+Output: 
+```c
+Dia chi cua ptr _ &ptr = 0061FF18
+Gia tri cua ptr _ ptr = 0061FF1C
+Gia tri ma con tro ptr tro toi _ *ptr = 10
+Dia chi cua bien a _ &a = 0061FF1C
+Gia tri cua bien a _ a = 10
+```
+- Như vậy ta thấy: `ptr = &a`, `*ptr = a`.
 - Lưu ý:
   - Kiểu dữ liệu trả về của con trỏ phải trùng với kiểu dữ liệu mà biến của con trỏ trỏ tới.
 - Con trỏ `void`
@@ -444,31 +453,57 @@ Giá trị của biến a: 10
   - Để lấy giá trị mà con trỏ `void` trỏ đến, ta phải gán kiểu dữ liệu cho con trỏ mới có thể truy xuất giá trị của biến mà con trỏ đó trỏ tới.
 - Ví dụ:
 ```c
-int a = 10;
-void *ptr = &a;
-printf("Địa chỉ của ptr: %p\n", &ptr);
-printf("Giá trị của ptr: %p\n", ptr);
-printf("Giá trị mà con trỏ ptr trỏ tới: %d\n", *ptr);
-printf("Địa của biến a: %p\n", &a);
-printf("Giá trị của biến a: %d\n", a);
-```
-Output: `error`
-```c
-int a = 10;
-void *ptr = &a;
-printf("Địa chỉ của ptr: %p\n", &ptr);
-printf("Giá trị của ptr: %p\n", ptr);
-printf("Giá trị mà con trỏ ptr trỏ tới: %d\n", *(int*)ptr);
-printf("Địa của biến a: %p\n", &a);
-printf("Giá trị của biến a: %d\n", a);
+#include <stdio.h>
+
+int main()
+{
+    int a = 10;
+    void *ptr = &a;
+    
+    printf("Dia chi cua ptr: %p\n", &ptr);
+    printf("Gia tri cua ptr: %p\n", ptr);
+    printf("Gia tri ma con tro ptr tro toi: %d\n", *ptr);
+    printf("Dia chi cua bien a: %p\n", &a);
+    printf("Gia tri cua bien a: %d\n", a);
+
+    return 0;
+}
 ```
 Output: 
 ```c
-Địa chỉ của ptr: 0x7fffca9a82e0
-Giá trị của ptr: 0x7fffca9a82dc
-Giá trị mà con trỏ ptr trỏ tới: 10
-Địa của biến a: 0x7fffca9a82dc
-Giá trị của biến a: 10
+Pointer.c: In function 'main':
+Pointer.c:10:52: warning: dereferencing 'void *' pointer
+     printf("Gia tri ma con tro ptr tro toi: %d\n", *ptr);
+                                                    ^~~~
+Pointer.c:10:5: error: invalid use of void expression
+     printf("Gia tri ma con tro ptr tro toi: %d\n", *ptr);
+     ^~~~~~
+```
+- Ép kiểu thành `int *`
+```c
+#include <stdio.h>
+
+int main()
+{
+    int a = 10;
+    void *ptr = &a;
+
+    printf("Dia chi cua ptr: %p\n", &ptr);
+    printf("Gia tri cua ptr: %p\n", ptr);
+    printf("Gia tri ma con tro ptr tro toi: %d\n", *((int*)ptr));
+    printf("Dia chi cua bien a: %p\n", &a);
+    printf("Gia tri cua bien a: %d\n", a);
+
+    return 0;
+}
+```
+Output: 
+```c
+Dia chi cua ptr: 0061FF18
+Gia tri cua ptr: 0061FF1C
+Gia tri ma con tro ptr tro toi: 10
+Dia chi cua bien a: 0061FF1C
+Gia tri cua bien a: 10
 ```
 </details>
 
@@ -878,10 +913,10 @@ volatile int a; //chương trình sẽ không tối ưu biến a
 <details>
 <summary><h3>Register</h3></summary>
 
-- Khi chạy chương trình thì RAM sẽ gửi dữ liệu cho thanh ghi (register), sau đó thanh ghi mới chuyển dữ liệu đó vào bộ xử lý trung tâm để thực hiện việc tính toán.
-- Điều này khiến cho chương trình mất rất nhiều thời gian vì phải truyền dữ liệu qua lại giữa: RAM, Register và ALU (bộ xử lý trung tâm).
+- Khi chạy chương trình thì **RAM** sẽ gửi dữ liệu cho **thanh ghi** (register), sau đó **thanh ghi** mới chuyển dữ liệu đó vào **bộ xử lý trung tâm** để thực hiện việc tính toán.
+- Điều này khiến cho chương trình mất rất nhiều thời gian vì phải truyền dữ liệu qua lại giữa: **RAM**, **thanh ghi (register)** và **ALU (bộ xử lý trung tâm)**.
 - Vì vậy biến `register` được tạo ra với mục đích tối ưu tốc độ chương trình.
-- Biến `register` được lưu trực tiếp trên thanh ghi, từ đó giảm đường truyền xuống chỉ còn truyền giữa: Register và ALU.
+- Biến `register` được lưu trực tiếp trên thanh ghi, từ đó giảm đường truyền xuống chỉ còn truyền giữa: **thanh ghi (register)** và **ALU (bộ xử lý trung tâm)**.
 - Vậy nên biến `register` có thể tối ưu tốc độ của chương trình.
 - Ví dụ:
 ```c
@@ -889,7 +924,7 @@ register int a;
 ```
 - Lưu ý:
   - Biến `register` không bị giới hạn khai báo số lượng biến tối đa. 
-  - Nhưng thanh ghi là có hạn. Nếu khai báo quá nhiều thì biến `register` sẽ lưu tạm trên RAM từ đó làm giảm đi tốc của chương trình.
+  - Nhưng thanh ghi là có hạn. Nếu khai báo quá nhiều thì biến `register` sẽ lưu tạm trên RAM. Sau đó sẽ nạp lần lượt các biến dư từ RAM vào thanh ghi từ đó làm giảm đi tốc của chương trình.
   - Biến `register` không có địa chỉ vì biến `register` không nằm trên RAM.
 </details>
 
