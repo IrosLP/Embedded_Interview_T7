@@ -390,7 +390,7 @@ printf("%d\n", Thu6); //Output: 6
 printf("%d\n", Thu7); //Output: 10
 printf("%d\n", CN);   //Output: 11
 ```
-- `enum` được dùng để đặt tên cho những con số
+- `enum` được dùng để biến tên thành số.
 - Mục đích là để người đọc dễ hiểu code.
 - Phần tử đầu tiên trong `enum` có giá trị là 0 (nếu không gán giá trị).
 - Và các phần tử tiếp theo có giá trị tăng thêm 1 so với phần tử trước đó.
