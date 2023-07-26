@@ -888,15 +888,117 @@ register int a;
 </details>
 
 </details>
+<!-- ----------------------------------Struct-------------------------------------------- -->
+<details>
+<summary><h2>Struct</h2></summary>
+
+- Cú pháp:
+```c
+struct <tên struct>{
+  //kiểu dữ liệu1    tên biến1
+  //kiểu dữ liệu2    tên biến2...
+};
+```
+- Struct là một kiểu dữ liệu do người dùng tự định nghĩa.
+- Struct bao gồm nhiều biến có nhiều kiểu dữ liệu khác nhau.
+- Kích thước của struct bằng bội số của kiểu dữ liệu lớn nhất.
+- Một lần quét dữ liệu sẽ do kiến trúc của vi xử lý quyết định.
+- Ví dụ:
+  - Kiến trúc 32bit -> quét một lần 4byte
+  - Kiến trúc 64bit -> quét một lần 8byte
+- Chính vì cách quét dữ liệu như vậy nên sẽ có hiện tượng padding (ô nhớ trống).
+- Để khắc phục hiện tượng này thì ta nên sắp xếp thứ tự các kiểu dữ liệu một cách hợp lý.
+- Ví dụ:
+```c
+#include <stdio.h>
+
+struct sinhVien1{
+  int maSV;
+  double diemTB;
+  int tuoi;
+  char TenSV[5];
+};
+
+struct sinhVien2{
+  int maSV;
+  int tuoi;
+  char TenSV[5];
+  double diemTB;
+};
+
+int main()
+{
+    printf("Size sinhVien1: %d\n", sizeof(struct sinhVien1));
+    printf("Size sinhVien2: %d\n", sizeof(struct sinhVien2));
+    return 0;
+}
+```
+Output:
+```c
+Size sinhVien1: 32
+Size sinhVien2: 24
+```
+</details>
 <!-- ----------------------------------Macro-------------------------------------------- -->
-<!-- <details>
+<details>
 <summary><h2>Marcro</h2></summary>
-- Cú pháp: 
+
+- Macro đơn giản là thay thế một tên nào đó thành một đoạn chương trình.
+- Macro thường dùng để gán giá trị cho biến, macro if-else, macro hàm, định nghĩa cho thư viện.
+- Macro được dùng để viết thư viện cho các dòng vi điều khiển để có thể chỉ sử dụng 1 chương trình mà vẫn có thể nạp cho nhiều dòng vi điều khiển khác nhau.
+- Ví dụ sử dụng để định nghĩa cho biến:
 ```c
 #define PI 3.14
 ```
-- Macro đơn giản là thay thế
-</details> -->
+- Ví dụ sử dụng để định nghĩa cho if-else:
+```c
+#define SIZE 20
+#if SIZE > 20
+printf("size lớn hơn 20");
+
+#elif SIZE == 20
+printf("size bằng 20");
+
+#else
+printf("size nhỏ hơn 20");
+#endif
+```
+- Ví dụ sử dụng để định nghĩa cho biến:
+```c
+#define CREATE_FUNC(func_name, cmd) /
+void func_name(){                   /
+    printf(cmd);
+    //hoặc nếu muốn cho macro tự hiểu cmd là chuỗi thì ta dùng dấu '#'
+    //printf(#cmd);
+}
+```
+- Ví dụ sử dụng để định nghĩa cho thư viện:
+```c
+#include <stdio.h>
+
+#ifndef STM32 //Kiểm tra xem đã có định nghĩa STM32 này chưa. nếu chưa định nghĩa STM32. nếu rồi thì sẽ bỏ qua.
+#define STM32 //thì định nghĩa STM32
+
+int a = 10;   //trong định nghĩa STM32 thì có biến int a = 10;
+
+#endif        //kết thúc #ifndef
+```
+- Ví dụ sử dụng để định nghĩa cho nhiều vi điều khiển:
+```c
+#define MCU STM32
+
+#if MCU == STM32
+//Câu lệnh cho dòng STM32
+#elif MCU == PIC
+//Câu lệnh cho dòng PIC
+#elif MCU == ESP32
+//Câu lệnh cho dòng ESP32
+#else
+printf("không có dòng vi điều khiển phù hợp");
+#endif
+```
+</details>
+
 <!-- ----------------------------------Function------------------------------------------ -->
 <details>
 <summary><h2>Function</h2></summary>
@@ -913,8 +1015,6 @@ register int a;
 - Program counter: bộ đếm (chỉ đếm và đọc giá trị) lấy giá trị hiện tại +4 và đọc giá trị
 - Stack pointer: bố nhớ để lưu địa chỉ
 - Khi bắt đầu CT sẽ chạy từ 0x00 cho đến khi gặp hàm - lưu địa chỉ kế tiếp vào stack pointer - program counter lấy địa chỉ của hàm và chạy lệnh của hàm cho đến khi kết thúc CT
-
-- 
 
 </details>
 
