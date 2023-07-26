@@ -868,7 +868,7 @@ Static s = 12
 - Điều này khiến chương trình dễ sai. Nhất là khi có ngắt trong hệ thống.
 - Biến `volatile` được tạo ra để khắc phục vấn đề này.
 - Biến `volatile` được sử dụng khi **không** muốn tối ưu biến khi chạy chế độ optimize.
-- Khi đó toàn bộ chương trình sẽ được compiler optimize trừ những biến có khai báo từ khóa optimize.
+- Khi đó toàn bộ chương trình sẽ được compiler optimize trừ những biến có khai báo từ khóa `static`.
 - Ví dụ:
 ```c
 volatile int a; //chương trình sẽ không tối ưu biến a
