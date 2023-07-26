@@ -1024,14 +1024,17 @@ Output: `1 0 1 2 3 8`
 ![Compiler](https://i0.wp.com/tapit.vn/wp-content/uploads/2017/07/GCC_CompilationProcess.png?zoom=2)
 
 1. Giai đoạn tiền xử lý – Preprocessor
+- Cú pháp để khởi chạy tiền xử lý là: `gcc -E main.c -o main.i`
 - Nhận mã nguồn
 - Xóa bỏ tất cả chú thích, comments của chương trình
 - Chỉ thị tiền xử lý (bắt đầu bằng #) cũng được xử lý
 - Ví dụ: chỉ thị #include cho phép ghép thêm mã chương trình của một tệp tiêu để vào mã nguồn cần dịch. Các hằng số được định nghĩa bằng #define sẽ được thay thế bằng giá trị cụ thể tại mỗi nơi sử dụng trong chương trình.
-2. Cộng đoạn dịch Ngôn Ngữ Bậc Cao sang Assembly
+2. Cộng đoạn dịch Ngôn Ngữ Bậc Cao sang Assembly (Compiler)
+- Cú pháp để khởi chạy Compiler là: `gcc main.i -S -o main.s`
 - Phân tích cú pháp (syntax) của mã nguồn NNBC
 -	Chuyển chúng sang dạng mã Assembly là một ngôn ngữ bậc thấp (hợp ngữ) gần với tập lệnh của bộ vi xử lý.
 3. Công đoạn dịch Assembly
+- Cú pháp để khởi chạy Assembler là: `gcc -c main.s -o main.o`
 -	Dich chương trình => Sang mã máy 0 và 1
 -	Một tệp mã máy (.obj) sinh ra trong hệ thống sau đó.
 4. Giai đoạn Linker
