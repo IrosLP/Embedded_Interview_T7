@@ -40,7 +40,7 @@ void printNumToString(int N)
     //c=5=lam <=> b!=0
     //b=1 <=> k can in
     char *num[] = {"khong", "mot", "hai", "ba", "bon", "nam", "sau", "bay", "tam", "chin", "lam"};
-    char *unit[] = {"tram", "muoi", "ty", "trieu", "nghin", "le"};
+    char *unit[] = {"tram", "muoi", "ty", "trieu", "nghin", "le", "don vi"};
     int flag = 0, a = 0, b = 0, c = 0;
     for(int i=0; i<10; i++)
     {
@@ -73,6 +73,7 @@ void printNumToString(int N)
                 else printf("%s ", num[c]);
                 if(i==3)    printf("%s ", unit[3]);
                 if(i==6)    printf("%s ", unit[4]);
+                if(i==9)    printf("%s ", unit[6]);
             }
             //--------------------------------------------
             if((a==0)&&(b!=0)&&(c!=0))
@@ -83,6 +84,7 @@ void printNumToString(int N)
                 else printf("%s ", num[c]);
                 if(i==3)    printf("%s ", unit[3]);
                 if(i==6)    printf("%s ", unit[4]);
+                if(i==9)    printf("%s ", unit[6]);
             }
             if((a!=0)&&(b==0)&&(c!=0))
             {
@@ -92,6 +94,7 @@ void printNumToString(int N)
                 printf("%s ", num[c]);
                 if(i==3)    printf("%s ", unit[3]);
                 if(i==6)    printf("%s ", unit[4]);
+                if(i==9)    printf("%s ", unit[6]);
             }
             if((a!=0)&&(b!=0)&&(c==0))
             {
@@ -101,13 +104,16 @@ void printNumToString(int N)
                 printf("%s ", unit[1]);
                 if(i==3)    printf("%s ", unit[3]);
                 if(i==6)    printf("%s ", unit[4]);
+                if(i==9)    printf("%s ", unit[6]);
             }
             //-------------------------------------------------
             if((a==0)&&(b==0)&&(c!=0))
             {
+                if(i==9)    printf("va ");
                 printf("%s ", num[c]);
                 if(i==3)    printf("%s ", unit[3]);
                 if(i==6)    printf("%s ", unit[4]);
+                if(i==9)    printf("%s ", unit[6]);
             }
             if((a==0)&&(b!=0)&&(c==0))
             {
@@ -115,6 +121,7 @@ void printNumToString(int N)
                 printf("%s ", unit[1]);
                 if(i==3)    printf("%s ", unit[3]);
                 if(i==6)    printf("%s ", unit[4]);
+                if(i==9)    printf("%s ", unit[6]);
             }
             if((a!=0)&&(b==0)&&(c==0))
             {
@@ -122,6 +129,7 @@ void printNumToString(int N)
                 printf("%s ", unit[0]);
                 if(i==3)    printf("%s ", unit[3]);
                 if(i==6)    printf("%s ", unit[4]);
+                if(i==9)    printf("%s ", unit[6]);
             }
             //-------------------------------------------------
             if((a==0)&&(b==0)&&(c==0));
