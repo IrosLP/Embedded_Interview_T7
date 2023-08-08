@@ -1,0 +1,5 @@
+Đề: Đảo ngược tất cả thứ tự từ trong câu/đoạn văn.
+
+tách từng từ ra -> lưu vào mảng list từ
+in ra từng từ trong mảng list từ 
+in ngược từ Word cuối -> word đầu tiên

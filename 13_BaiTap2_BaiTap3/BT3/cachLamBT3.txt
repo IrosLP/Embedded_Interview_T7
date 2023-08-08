@@ -1,0 +1,45 @@
+		chia cho 1.000.000 	-> 	A triệu
+lấy dư 	-> 	chia cho   100.000 	-> 	B trăm nghìn
+lấy dư 	->	chia cho    10.000 	-> 	C chục nghìn
+lấy dư 	->	chia cho     1.000 	-> 	D nghìn
+lấy dư 	->	chia cho       100 	-> 	E trăm
+lấy dư 	->	chia cho        10 	-> 	F chục
+lấy dư 	->			 	-> 	G 
+
+=> nếu A,B,...,G != 0 -> A triệu B trăm C mươi D nghìn E trăm F mươi G
+=> nếu A = 0	      ->         B trăm C mươi D nghìn E trăm F mươi G
+=> nếu B = 0	      -> A triệu 0 trăm C mươi D nghìn E trăm F mươi G
+=> nếu C = 0	      -> A triệu B trăm  'lẻ'  D nghìn E trăm F mươi G
+=> nếu D = 0	      -> A triệu B trăm C mươi 'nghìn' E trăm F mươi G
+=> nếu E = 0	      -> A triệu B trăm C mươi D nghìn F trăm G mươi
+=> nếu F = 0	      -> A triệu B trăm C mươi D nghìn E trăm 'lẻ' G
+=> nếu G = 0	      -> A triệu B trăm C mươi D nghìn E trăm F mươi
+
+*LƯU Ý: nếu nhiều hơn 7 chữ số -> tạo ra 1 hàm ĐẾM SỐ LƯỢNG số đã được nhập vào
+	lần 1 chia cho 1*10 ^ (số lượng số)
+	lần 2 chia cho 1*10 ^ (số lượng số -1)
+	lần 3 chia cho 1*10 ^ (số lượng số -2)
+	.
+	.
+	.
+	lần n chia cho 1*10 ^ (số lượng số - (n-1))
+
+gặp a[i] != 0 -> bỏ qua hết
+0 trăm lẻ 
+
+xét cụm 3 trăm-lẻ-đơn vị
+
+mất trăm -> 
+mất mươi -> lẻ
+mất đơn vị -> đơn vị
+
+mất trăm + mươi -> đơn vị
+mất trăm + đơn vị -> 
+mất mươi + đơn vị -> đơn vị
+
+mất cả 3 -> 
+
+1 triệu 2 trăm 3 mươi 4 nghìn 5 trăm 6 mươi 7
+
+sử dụng phép chia 
+và chia lấy dư
