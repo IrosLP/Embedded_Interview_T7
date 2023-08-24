@@ -25,6 +25,8 @@
 #include <iomanip>
 #include <cstring>
 
+int decreaseId=0;
+
 using namespace std;
 
 typedef enum{NAM = 1, NU} TypeGender;
@@ -49,7 +51,6 @@ class Student{
         //-------CONSTRUCTOR------
         Student(string name = "", int age = 0, TypeGender gender = NAM, double mathScore = 0.0, double physicalScore = 0.0, double chemistryScore = 0.0);
         //----------SET-----------
-        void autoSetId();
         void setName(string);
         void setAge(int);
         void setGender(int);
@@ -74,6 +75,8 @@ class Student{
 Student::Student(string name, int age, TypeGender gender, double mathScore, double physicalScore, double chemistryScore){
     static int ID = 1000;    
     ID++;
+    ID -= decreaseId;
+    decreaseId = 0;
     this->id = ID;
 
     this->name = name;
@@ -86,11 +89,6 @@ Student::Student(string name, int age, TypeGender gender, double mathScore, doub
 }
 
 //-----------------------------------------------SET--------------------------------------
- void Student::autoSetId(){
-    static int ID = 1000;    
-    ID++;
-    this->id = ID;
-}
 void Student::setName(string name){
     this->name = name;
 }
@@ -233,9 +231,8 @@ void printStudentInforOfTable(Student a){
 
 void addStudent(vector <Student>& studentList){
     int key;
-    Student a;
     do{
-        a.autoSetId();
+        Student a;
         enterInfor(a);
         studentList.push_back(a);
         cout << "***NHAP THONG TIN THANH CONG***" << endl;
@@ -272,23 +269,22 @@ void deleteInfor(vector <Student>& studentList){
     cin >> currentId;
     for(int i=0; i<studentList.size(); i++){
         if(currentId == studentList[i].getId()){
-            if(i != studentList.size() - 1){
-                studentList[i].setName(studentList[i+1].getName());
-                studentList[i].setAge(studentList[i+1].getAge());
-                studentList[i].setGender(studentList[i+1].getGender());
-                studentList[i].setMathScore(studentList[i+1].getMathScore());
-                studentList[i].setPhysicalScore(studentList[i+1].getPhysicalScore());
-                studentList[i].setChemistryScore(studentList[i+1].getChemistryScore());
-                studentList.pop_back();
-                found = 1;
-                cout << "***XOA THONG TIN THANH CONG***" << endl;
-                break;
+            for(int j=i; j<studentList.size(); j++){
+                if(j != studentList.size() - 1){
+                    studentList[j].setName(studentList[j+1].getName());
+                    studentList[j].setAge(studentList[j+1].getAge());
+                    studentList[j].setGender(studentList[j+1].getGender());
+                    studentList[j].setMathScore(studentList[j+1].getMathScore());
+                    studentList[j].setPhysicalScore(studentList[j+1].getPhysicalScore());
+                    studentList[j].setChemistryScore(studentList[j+1].getChemistryScore());
+                    found = 1;
+                }
+                else found = 1;
             }
-            else{
-                found = 1;
-                studentList.pop_back();
-                cout << "***XOA THONG TIN THANH CONG***" << endl;
-            }
+            studentList.pop_back();
+            decreaseId++;
+            cout << "***XOA THONG TIN THANH CONG***" << endl;
+            break;
         }
     }
     if(found == 0) cout << "***KHONG TIM THAY ID NAY***" << endl;
@@ -307,15 +303,15 @@ void findStudent(vector <Student> studentList){
             printStudentInforOfTable(studentList[i]);
             found = 1;
         }
-        if(found == 0) cout << "***KHONG TIM THAY TEN NAY***" << endl;
     }
+    if(found == 0) cout << "***KHONG TIM THAY TEN NAY***" << endl;
 }
 
 void sortByAverageScore(vector <Student>& studentList){
     Student temp;
     for(int i=0; i<studentList.size() - 1; i++){
         for(int j=i; j<studentList.size(); j++){
-            if(studentList[i].getAverageScore() > studentList[j].getAverageScore()){
+            if(studentList[i].getAverageScore() < studentList[j].getAverageScore()){
                 temp = studentList[i];
                 studentList[i] = studentList[j];
                 studentList[j] = temp;
@@ -341,7 +337,6 @@ void sortByName(vector <Student>& studentList){
 //-----------------------------------------------MAIN--------------------------------------
 int main(){
     vector <Student> studentList;
-    Student a;
     int key;
 
     while (1){    
