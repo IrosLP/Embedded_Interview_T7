@@ -23,9 +23,6 @@
 #include <string>
 #include <vector>
 #include <iomanip>
-#include <cstring>
-
-int decreaseId=0;
 
 using namespace std;
 
@@ -75,8 +72,6 @@ class Student{
 Student::Student(string name, int age, TypeGender gender, double mathScore, double physicalScore, double chemistryScore){
     static int ID = 1000;    
     ID++;
-    ID -= decreaseId;
-    decreaseId = 0;
     this->id = ID;
 
     this->name = name;
@@ -97,13 +92,11 @@ void Student::setAge(int age){
 }
 void Student::setGender(int gender){
     if(gender == 1) this->gender = NAM;
-    else if(gender == 2) this->gender = NU;
-    else cout << "Nhap sai gioi tinh" << endl;
+    if(gender == 2) this->gender = NU;
 }
 void Student::setGender(string gender){
     if(gender == "NAM") this->gender = NAM;
-    else if(gender == "NU") this->gender = NU;
-    else cout << "NHAP SAI GIOI TINH" << endl;
+    if(gender == "NU") this->gender = NU;
 }
 void Student::setMathScore(float mathScore){
     this->mathScore = mathScore;
@@ -250,11 +243,65 @@ void displayListStudent(vector <Student> studentList){
 
 void updateInfor(vector <Student>& studentList){
     int currentId, found = 0;
+    string name;
     cout << "Nhap vao ID sinh vien: ";
     cin >> currentId;
     for(int i=0; i<studentList.size(); i++){
         if(currentId == studentList[i].getId()){
-            enterInfor(studentList[i]);
+            cout << "Chon noi dung muon sua:\n\t1: Sua ten\n\t2: Sua tuoi\n\t3: Sua gioi tinh\n\t4: Sua diem Toan\n\t5: Sua diem Ly\n\t6: Sua diem Hoa\n";
+            int key;
+            cin >> key;
+            switch (key)
+            {
+            case 1:
+                cout << "Nhap ten: ";
+                cin >> name;
+                studentList[i].setName(name);
+                break;
+            case 2:
+                int age;
+                do{
+                    cout << "Nhap tuoi: ";
+                    cin >> age;
+                }while((age < 0) && (age > 100));
+                studentList[i].setAge(age);
+                break;
+            case 3:
+                int gioiTinh;
+                do{
+                    cout << "Chon gioi tinh:\n\t1.NAM\n\t2.NU";
+                    cin >> gioiTinh;
+                }while((gioiTinh != 1)&&(gioiTinh != 2));
+                studentList[i].setGender(gioiTinh);
+                break;
+            case 4:
+                float mathScore;
+                do{
+                    cout << "Nhap diem Toan: ";
+                    cin >> mathScore;
+                }while((mathScore < 0.0)||(mathScore > 10.0));
+                studentList[i].setMathScore(mathScore);
+                break;
+            case 5:
+                float physicalScore;
+                do{
+                    cout << "Nhap diem Ly: ";
+                    cin >> physicalScore;
+                }while((physicalScore < 0.0)||(physicalScore > 10.0));
+                studentList[i].setPhysicalScore(physicalScore);
+                break;
+            case 6:
+                float chemistryScore;
+                do{
+                    cout << "Nhap diem Hoa: ";
+                    cin >> chemistryScore;
+                }while((chemistryScore < 0.0)||(chemistryScore > 10.0));
+                studentList[i].setChemistryScore(chemistryScore);
+                break;
+            default:
+                cout << "Vui long chon chuc nang tu 1 -> 6" << endl;
+                break;
+            }
             cout << "***CAP NHAT THONG TIN THANH CONG***" << endl;
             found = 1;
             break;
@@ -269,20 +316,8 @@ void deleteInfor(vector <Student>& studentList){
     cin >> currentId;
     for(int i=0; i<studentList.size(); i++){
         if(currentId == studentList[i].getId()){
-            for(int j=i; j<studentList.size(); j++){
-                if(j != studentList.size() - 1){
-                    studentList[j].setName(studentList[j+1].getName());
-                    studentList[j].setAge(studentList[j+1].getAge());
-                    studentList[j].setGender(studentList[j+1].getGender());
-                    studentList[j].setMathScore(studentList[j+1].getMathScore());
-                    studentList[j].setPhysicalScore(studentList[j+1].getPhysicalScore());
-                    studentList[j].setChemistryScore(studentList[j+1].getChemistryScore());
-                    found = 1;
-                }
-                else found = 1;
-            }
-            studentList.pop_back();
-            decreaseId++;
+            studentList.erase(studentList.begin()+i);
+            found = 1;
             cout << "***XOA THONG TIN THANH CONG***" << endl;
             break;
         }
