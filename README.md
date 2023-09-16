@@ -1189,3 +1189,227 @@ printf("không có dòng vi điều khiển phù hợp");
   - Thực hiện lặp lại như vậy cho đến khi kết thúc chương trình.
 </details>
 </details>
+
+<details>
+<summary><h1>C++ Programming Language</h1></summary>
+
+<details>
+<summary><h2>Class</h2></summary>
+
+Class bao gồm 2 thành phần là:
+- Thuộc tính (Properties)
+- Phương thức (Method)
+Ví dụ:
+```c++
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class SinhVien{
+		private: 
+				int MSSV; //properties
+				string TEN;
+				string LOP;
+				int NAM_SINH;
+		public:
+				int tuoi(); //method
+};
+
+int SinhVien::tuoi(){
+		return 2023-NAM_SINH;
+}
+```
+- Hàm tạo (Constructor): Là hàm có tên trùng với tên Class và được gọi mỗi khi tạo Object bằng Class đó.
+- Hàm hủy (Destructor): Là hàm có tên trùng với tên Class nhưng có dấu ‘~’ phía trước và được gọi mỗi khi thu hồi vùng nhớ Object của một Class.
+```c++
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class SinhVien{
+		private: 
+				int MSSV;
+				string TEN;
+				string LOP;
+				int NAM_SINH;
+				int TUOI;
+		public:
+				SinhVien();
+				~SinhVien();
+};
+
+SinhVien::SinhVien(){
+		cout << "Ham tao duoc goi" << endl;
+}
+
+SinhVien::~SinhVien(){
+		cout << "Ham huy duoc goi" << endl;
+}
+
+int main()
+{
+		cout << "Bat dau" << endl;
+		if(1){
+				SinhVien x;
+		}
+		cout << "ket thuc" << endl;
+		return 0;
+}
+```
+- Output:
+```c++
+Bat dau
+Ham tao duoc goi
+Ham huy duoc goi
+ket thuc
+```
+
+<summary><h3>Static</h3></summary>
+
+- Khi sử dụng Static trong Class thì tất cả Object trong Class đều sử dụng chung  một địa chỉ  Static Property đó.
+- Ví dụ:
+```c++
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class SinhVien{
+	private: 
+		static int MSSV;
+		string TEN;
+		string LOP;
+	public:
+		SinhVien(string, string);
+		void display();
+};
+
+int SinhVien::MSSV = 0;
+
+SinhVien::SinhVien(string TEN, string LOP){
+	this->TEN = TEN;
+	this->LOP = LOP;
+}
+
+void SinhVien::display(){
+	this->MSSV++;
+	cout << "MSSV: " << MSSV << endl;
+	cout << "TEN: " << TEN << endl;
+	cout << "LOP: " << LOP << endl;
+}
+
+int main()
+{
+	SinhVien a("Loc", "9A3");
+	SinhVien b("Dat", "9A5");
+	a.display();
+	cout << "-----------" << endl;
+	b.display();
+	return 0;
+}
+```
+- Output:
+```c++
+MSSV: 1
+TEN: Loc
+LOP: 9A3
+-----------
+MSSV: 2
+TEN: Dat
+LOP: 9A5
+```
+- Vì MSSV của 2 Object có chung địa chỉ nên khi gặp lệnh “this->MSSV++;” trong method “display()” thì giá trị của MSSV tăng lên dù 2 Object có khác nhau.
+
+<summary><h3>Access Modifier: (Phạm vi truy cập)</h3></summary>
+
+- **Public:** Cho phép Object truy cập bên ngoài và bên trong Class.
+- **Private:** Không phép Object truy cập bên ngoài Class, chỉ có thể sử dụng bên trong Class. **Lưu ý:** Những Properties nằm trong private của Base Class (Class cha) sau khi được kế thừa thì không thể truy cập được ở Derived Class (Class con).
+- **Protected:** Không cho phép truy cập bên ngoài Class như Private, nhưng cho phép truy cập ở Derived Class (Class con) sau khi kế thừa.
+
+</details>
+
+<details>
+<summary><h2>Tính chất của hướng đối tượng</h2></summary>
+
+<details>
+<summary><h3>Tính đóng gói (Encapsulation)</h3></summary>
+
+- Toàn bộ Properties của một Class phải ở chế độ Private.
+- Không cho phép Object truy cập trực tiếp vào Properties.
+
+</details>
+
+<details>
+<summary><h3>Tính trừu tượng (Abstraction)</h3></summary>
+
+- Vì không được truy cập hoặc thay đổi giá trị trực tiếp của Properties (thuộc tính) trong Class vì vi phạm Tính đóng gói.
+- Nên phải sử dụng các Method (phương thức) để truy cập hoặc thay đổi giá trị của Properties (thuộc tính) trong Class.
+- Tính trừu tượng được sử dụng để hạn chế quyền của người sử dụng. Chỉ cho phép người sử dụng truy cập đến Properties thông qua một số Method mà người viết chương trình mong muốn.
+
+</details>
+
+<details>
+<summary><h3>Tính kế thừa (inheritance)</h3></summary>
+
+- Là tạo ra 1 Derived Class (Class con) có toàn bộ những đặc tính và phương thức của Base Class (Class cha).
+- Kế thừa có 3 phương thức: **public**, **private**, **protected**.
+    - **Public**:
+        
+        
+        | Access Modifier
+        Base Class | Access Modifier
+        Derived Class |
+        | --- | --- |
+        | Public | Public |
+        | Protected | Protected |
+        | Private | Private |
+    - **Protected:**
+        
+        
+        | Access Modifier
+        Base Class | Access Modifier
+        Derived Class |
+        | --- | --- |
+        | Public | Protected |
+        | Protected | Protected |
+        | Private | Private |
+    - **Private:**
+        
+        
+        | Access Modifier
+        Base Class | Access Modifier
+        Derived Class |
+        | --- | --- |
+        | Public | Private |
+        | Protected | Private |
+        | Private | Private |
+- Ghi đè Method (phương thức): có một Method cùng tên mà Base Class và Derived Class lại có tham số và lệnh trong Method đó là khác nhau → Ta cần ghi đè Method đó cho phù hợp với từng Derived Class (Lớp con).
+
+
+</details>
+
+<details>
+<summary><h3>Tính đa hình (polymorphism)</h3></summary>
+
+- Là một **Method** (phương thức) có thể có một tên nhưng định nghĩa nhiều lần với nhiều **Input Parameter** khác nhau.
+- Lúc này chương trình sẽ tìm đến **Method** có **Input Parameter** phù hợp nhất để chạy chương trình.
+
+</details>
+
+</details>
+
+</details>
+
+<!-- ----------------------------------EMBEDDED------------------------------------------ -->
+<details>
+<summary><h1>Embedded</h1></summary>
+
+<details>
+<summary><h2>SPI</h2></summary>
+
+
+</details>
+
+</details>
