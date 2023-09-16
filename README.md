@@ -1193,212 +1193,500 @@ printf("không có dòng vi điều khiển phù hợp");
 <details>
 <summary><h1>C++ Programming Language</h1></summary>
 
+  <details>
+  <summary><h2>Class</h2></summary>
+
+  Class bao gồm 2 thành phần là:
+  - Thuộc tính (Properties)
+  - Phương thức (Method)
+  Ví dụ:
+    ```cpp
+    #include <iostream>
+    #include <string>
+
+    using namespace std;
+
+    class SinhVien{
+        private: 
+            int MSSV; //properties
+            string TEN;
+            string LOP;
+            int NAM_SINH;
+        public:
+            int tuoi(); //method
+    };
+
+    int SinhVien::tuoi(){
+        return 2023-NAM_SINH;
+    }
+    ```
+  - Hàm tạo (Constructor): Là hàm có tên trùng với tên Class và được gọi mỗi khi tạo Object bằng Class đó.
+  - Hàm hủy (Destructor): Là hàm có tên trùng với tên Class nhưng có dấu ‘~’ phía trước và được gọi mỗi khi thu hồi vùng nhớ Object của một Class.
+    ```cpp
+    #include <iostream>
+    #include <string>
+
+    using namespace std;
+
+    class SinhVien{
+        private: 
+            int MSSV;
+            string TEN;
+            string LOP;
+            int NAM_SINH;
+            int TUOI;
+        public:
+            SinhVien();
+            ~SinhVien();
+    };
+
+    SinhVien::SinhVien(){
+        cout << "Ham tao duoc goi" << endl;
+    }
+
+    SinhVien::~SinhVien(){
+        cout << "Ham huy duoc goi" << endl;
+    }
+
+    int main()
+    {
+        cout << "Bat dau" << endl;
+        if(1){
+            SinhVien x;
+        }
+        cout << "ket thuc" << endl;
+        return 0;
+    }
+    ```
+  - Output:
+    ```cpp
+    Bat dau
+    Ham tao duoc goi
+    Ham huy duoc goi
+    ket thuc
+    ```
+
+  <summary><h3>Static</h3></summary>
+
+  - Khi sử dụng Static trong Class thì tất cả Object trong Class đều sử dụng chung  một địa chỉ  Static Property đó.
+  - Ví dụ:
+    ```cpp
+    #include <iostream>
+    #include <string>
+
+    using namespace std;
+
+    class SinhVien{
+      private: 
+        static int MSSV;
+        string TEN;
+        string LOP;
+      public:
+        SinhVien(string, string);
+        void display();
+    };
+
+    int SinhVien::MSSV = 0;
+
+    SinhVien::SinhVien(string TEN, string LOP){
+      this->TEN = TEN;
+      this->LOP = LOP;
+    }
+
+    void SinhVien::display(){
+      this->MSSV++;
+      cout << "MSSV: " << MSSV << endl;
+      cout << "TEN: " << TEN << endl;
+      cout << "LOP: " << LOP << endl;
+    }
+
+    int main()
+    {
+      SinhVien a("Loc", "9A3");
+      SinhVien b("Dat", "9A5");
+      a.display();
+      cout << "-----------" << endl;
+      b.display();
+      return 0;
+    }
+    ```
+  - Output:
+    ```cpp
+    MSSV: 1
+    TEN: Loc
+    LOP: 9A3
+    -----------
+    MSSV: 2
+    TEN: Dat
+    LOP: 9A5
+    ```
+  - Vì MSSV của 2 Object có chung địa chỉ nên khi gặp lệnh “this->MSSV++;” trong method “display()” thì giá trị của MSSV tăng lên dù 2 Object có khác nhau.
+
+  <summary><h3>Access Modifier: (Phạm vi truy cập)</h3></summary>
+
+  - **Public:** Cho phép Object truy cập bên ngoài và bên trong Class.
+  - **Private:** Không phép Object truy cập bên ngoài Class, chỉ có thể sử dụng bên trong Class. **Lưu ý:** Những Properties nằm trong private của Base Class (Class cha) sau khi được kế thừa thì không thể truy cập được ở Derived Class (Class con).
+  - **Protected:** Không cho phép truy cập bên ngoài Class như Private, nhưng cho phép truy cập ở Derived Class (Class con) sau khi kế thừa.
+
+  </details>
+
+  <details>
+  <summary><h2>Tính chất của hướng đối tượng</h2></summary>
+
+  <details>
+  <summary><h3>Tính đóng gói (Encapsulation)</h3></summary>
+
+  - Toàn bộ Properties của một Class phải ở chế độ Private.
+  - Không cho phép Object truy cập trực tiếp vào Properties.
+
+  </details>
+
+  <details>
+  <summary><h3>Tính trừu tượng (Abstraction)</h3></summary>
+
+  - Vì không được truy cập hoặc thay đổi giá trị trực tiếp của Properties (thuộc tính) trong Class vì vi phạm Tính đóng gói.
+  - Nên phải sử dụng các Method (phương thức) để truy cập hoặc thay đổi giá trị của Properties (thuộc tính) trong Class.
+  - Tính trừu tượng được sử dụng để hạn chế quyền của người sử dụng. Chỉ cho phép người sử dụng truy cập đến Properties thông qua một số Method mà người viết chương trình mong muốn.
+
+  </details>
+
+  <details>
+  <summary><h3>Tính kế thừa (inheritance)</h3></summary>
+
+  - Là tạo ra 1 Derived Class (Class con) có toàn bộ những đặc tính và phương thức của Base Class (Class cha).
+  - Kế thừa có 3 phương thức: **public**, **private**, **protected**.
+      - **Public**:
+          
+          
+          | Access Modifier Base Class | Access Modifier Derived Class |
+          | --- | --- |
+          | Public | Public |
+          | Protected | Protected |
+          | Private | Private |
+      - **Protected:**
+          
+          
+          | Access Modifier Base Class | Access Modifier Derived Class |
+          | --- | --- |
+          | Public | Protected |
+          | Protected | Protected |
+          | Private | Private |
+      - **Private:**
+          
+          
+          | Access Modifier Base Class | Access Modifier Derived Class |
+          | --- | --- |
+          | Public | Private |
+          | Protected | Private |
+          | Private | Private |
+  - Ghi đè Method (phương thức): có một Method cùng tên mà Base Class và Derived Class lại có tham số và lệnh trong Method đó là khác nhau → Ta cần ghi đè Method đó cho phù hợp với từng Derived Class (Lớp con).
+
+
+  </details>
+
+  <details>
+  <summary><h3>Tính đa hình (polymorphism)</h3></summary>
+
+  - Là một **Method** (phương thức) có thể có một tên nhưng định nghĩa nhiều lần với nhiều **Input Parameter** khác nhau.
+  - Lúc này chương trình sẽ tìm đến **Method** có **Input Parameter** phù hợp nhất để chạy chương trình.
+
+  </details>
+
+  </details>
+
+  <details>
+  <summary><h2>Vector</h2></summary>
+
+  - Là một mảng chứa những phần tử có cùng một kiểu dữ liệu.
+  - Thư viện: #include <vector>
+  - Cú pháp: vector <Kiểu dữ liệu> Tên vector;
+  - Ví dụ:
+  ```c++
+  #include <iostream>
+  #include <string>
+  #include <vector>
+
+  using namespace std;
+
+  int main(){
+    vector <int> mangSoThuc;
+    vector <char> mangKyTu;
+    vector <string> mangChuoi;
+
+    vector <vector <int>> mangHaiChieuSoThuc;
+  }
+  ```
+
+  </details>
+
+  <details>
+  <summary><h2>For Each</h2></summary>
+
+  - Là một vòng for được thu gọn
+  - Cú pháp:
+    ```cpp
+    for (data_type  variable_name : container_name) {
+        operations using variable_name
+    }
+    ```
+  - Sử dụng:
+    ```cpp
+    #include <iostream>
+    using namespace std;
+    int main()
+    {
+      int arr[] = { 10, 20, 30, 40 };
+      for (int x : arr)
+          cout << x << " ";
+    } 
+    ```
+  - Output:
+      ```cpp
+      10 20 30 40
+      ```
+  </details>
+
+  <details>
+  <summary><h2>Template</h2></summary>
+
+  - Là 1 tính chất của tính đa hình. Template được sử dụng để hạn chế viết lại cùng 1 method cho những trường hợp khác KDL.
+  - Cú pháp: 
+    ```cpp
+    template <typename <Tên KDL>>
+    ```
+  - Ví dụ 1:
+    ```cpp
+      #include <iostream>
+
+    template <typename var1, typename var2>
+
+    var1 tong(var1 a, var2 b){
+      return var1(a+b);
+    }
+
+    int main(){
+      std::cout << "Tong a va b: " << tong(4.3,5) << std::endl;
+      return 0;
+    }
+    ```
+  - Output:
+    ```cpp
+    Tong a va b: 9.3
+    ```
+  </details>
+
+  <details>
+  <summary><h2>Namespace</h2></summary>
+
+  - Là 1 vùng nhớ chứa nhiều member. Member có thể là biến, class, function,… 
+  - Ví dụ:
+    ```cpp
+    #include <iostream>
+
+    using namespace std;
+
+    namespace ConOngA{
+      int Teo = 10;
+    }
+    namespace ConOngB{
+      int Teo = 20;
+    }
+    int main(){
+      cout << ConOngA::Teo << endl;
+      cout << ConOngB::Teo << endl;
+      return 0;
+    }
+    ```
+  - Output:
+    ```cpp
+    10
+    20
+    ```
+  - **Lưu ý:** Nếu thư viện tự tạo có namespace trùng tên với namespace trong file main thì 2 namespace này là một.
+  - **Using namespace:**
+    - là sử dụng namespace mà không cần khai báo toán tử phạm vi (”: :”) cho biến nằm trong namespace đó.
+    - Ví dụ:
+      ```cpp
+      #include <iostream>
+
+      using namespace std;
+
+      namespace ConOngA{
+        int Teo = 10;
+      }
+      namespace ConOngB{
+        int Teo = 20;
+      }
+
+      using namespace ConOngA;
+
+      int main(){
+        cout << Teo << endl;
+        cout << ConOngB::Teo << endl;
+        return 0;
+      }
+      ```
+    - Output:
+      ```cpp
+      10
+      20
+      ```
+    - **Lưu ý:**  Không thể sử dụng **using namespace** cho 2 namespace trở lên có biến thành viên cùng tên với nhau (ví dụ: 2 namespace đề có tên biến: int Teo).
+  </details>
+
 <details>
-<summary><h2>Class</h2></summary>
+  <summary><h2>Virtual Function</h2></summary>
 
-Class bao gồm 2 thành phần là:
-- Thuộc tính (Properties)
-- Phương thức (Method)
-Ví dụ:
-```c++
-#include <iostream>
-#include <string>
+  - Được sử dụng khi có class con kế thừa method của class cha. Nhưng method của class con cần được load lại (overload) method được ghi đè (override) mới nhất cho phù hợp với những tính chất của class con.
+  - Ví dụ:
+    ```cpp
+    #include <iostream>
 
-using namespace std;
+    using namespace std;
 
-class SinhVien{
-		private: 
-				int MSSV; //properties
-				string TEN;
-				string LOP;
-				int NAM_SINH;
-		public:
-				int tuoi(); //method
-};
+    class DoiTuong{
+        public:
+            virtual char* cmd(){
+                return (char*)"Doi tuong";
+            }
+            void display(){
+                cout << cmd() << endl;
+            }
+    };
 
-int SinhVien::tuoi(){
-		return 2023-NAM_SINH;
-}
-```
-- Hàm tạo (Constructor): Là hàm có tên trùng với tên Class và được gọi mỗi khi tạo Object bằng Class đó.
-- Hàm hủy (Destructor): Là hàm có tên trùng với tên Class nhưng có dấu ‘~’ phía trước và được gọi mỗi khi thu hồi vùng nhớ Object của một Class.
-```c++
-#include <iostream>
-#include <string>
+    class SinhVien : public DoiTuong{
+        char *cmd(){
+            return (char*)"Sinh Vien";
+        }
+    };
 
-using namespace std;
-
-class SinhVien{
-		private: 
-				int MSSV;
-				string TEN;
-				string LOP;
-				int NAM_SINH;
-				int TUOI;
-		public:
-				SinhVien();
-				~SinhVien();
-};
-
-SinhVien::SinhVien(){
-		cout << "Ham tao duoc goi" << endl;
-}
-
-SinhVien::~SinhVien(){
-		cout << "Ham huy duoc goi" << endl;
-}
-
-int main()
-{
-		cout << "Bat dau" << endl;
-		if(1){
-				SinhVien x;
-		}
-		cout << "ket thuc" << endl;
-		return 0;
-}
-```
-- Output:
-```c++
-Bat dau
-Ham tao duoc goi
-Ham huy duoc goi
-ket thuc
-```
-
-<summary><h3>Static</h3></summary>
-
-- Khi sử dụng Static trong Class thì tất cả Object trong Class đều sử dụng chung  một địa chỉ  Static Property đó.
-- Ví dụ:
-```c++
-#include <iostream>
-#include <string>
-
-using namespace std;
-
-class SinhVien{
-	private: 
-		static int MSSV;
-		string TEN;
-		string LOP;
-	public:
-		SinhVien(string, string);
-		void display();
-};
-
-int SinhVien::MSSV = 0;
-
-SinhVien::SinhVien(string TEN, string LOP){
-	this->TEN = TEN;
-	this->LOP = LOP;
-}
-
-void SinhVien::display(){
-	this->MSSV++;
-	cout << "MSSV: " << MSSV << endl;
-	cout << "TEN: " << TEN << endl;
-	cout << "LOP: " << LOP << endl;
-}
-
-int main()
-{
-	SinhVien a("Loc", "9A3");
-	SinhVien b("Dat", "9A5");
-	a.display();
-	cout << "-----------" << endl;
-	b.display();
-	return 0;
-}
-```
-- Output:
-```c++
-MSSV: 1
-TEN: Loc
-LOP: 9A3
------------
-MSSV: 2
-TEN: Dat
-LOP: 9A5
-```
-- Vì MSSV của 2 Object có chung địa chỉ nên khi gặp lệnh “this->MSSV++;” trong method “display()” thì giá trị của MSSV tăng lên dù 2 Object có khác nhau.
-
-<summary><h3>Access Modifier: (Phạm vi truy cập)</h3></summary>
-
-- **Public:** Cho phép Object truy cập bên ngoài và bên trong Class.
-- **Private:** Không phép Object truy cập bên ngoài Class, chỉ có thể sử dụng bên trong Class. **Lưu ý:** Những Properties nằm trong private của Base Class (Class cha) sau khi được kế thừa thì không thể truy cập được ở Derived Class (Class con).
-- **Protected:** Không cho phép truy cập bên ngoài Class như Private, nhưng cho phép truy cập ở Derived Class (Class con) sau khi kế thừa.
-
-</details>
-
-<details>
-<summary><h2>Tính chất của hướng đối tượng</h2></summary>
-
-<details>
-<summary><h3>Tính đóng gói (Encapsulation)</h3></summary>
-
-- Toàn bộ Properties của một Class phải ở chế độ Private.
-- Không cho phép Object truy cập trực tiếp vào Properties.
-
-</details>
-
-<details>
-<summary><h3>Tính trừu tượng (Abstraction)</h3></summary>
-
-- Vì không được truy cập hoặc thay đổi giá trị trực tiếp của Properties (thuộc tính) trong Class vì vi phạm Tính đóng gói.
-- Nên phải sử dụng các Method (phương thức) để truy cập hoặc thay đổi giá trị của Properties (thuộc tính) trong Class.
-- Tính trừu tượng được sử dụng để hạn chế quyền của người sử dụng. Chỉ cho phép người sử dụng truy cập đến Properties thông qua một số Method mà người viết chương trình mong muốn.
-
-</details>
-
-<details>
-<summary><h3>Tính kế thừa (inheritance)</h3></summary>
-
-- Là tạo ra 1 Derived Class (Class con) có toàn bộ những đặc tính và phương thức của Base Class (Class cha).
-- Kế thừa có 3 phương thức: **public**, **private**, **protected**.
-    - **Public**:
+    int main(){
+        DoiTuong dt;
+        dt.display();
         
+        SinhVien sv;
+        sv.display();
         
-        | Access Modifier
-        Base Class | Access Modifier
-        Derived Class |
-        | --- | --- |
-        | Public | Public |
-        | Protected | Protected |
-        | Private | Private |
-    - **Protected:**
+      return 0;
+    }
+    ```
+  - Output:
+    ```cpp
+    Doi tuong
+    Sinh Vien
+    ```
+  ⇒ Nếu không có từ khóa “virtual” phía trước method cmd() của class DoiTuong thì kết quá sẽ là:
+    ```cpp
+    Doi tuong
+    Doi tuong
+    ```
+  - Khi gọi đến virtual function, chương trình sẽ kiểm tra virtual function này có được ghi đè (override) ở đâu không.
+  - Nếu có thì chương trình sẽ load lại (overload) virtual function được *định nghĩa mới nhất*.
+  
+  </details>
+
+  <details>
+  <summary><h2>List</h2></summary>
+
+  - Thư viện : `#include <list>`
+  - Linked list lưu dữ liệu theo từng node.
+  - Mỗi Node bao gồm 2 giá trị:
+    - Dữ liệu (data)
+    - Con trỏ trỏ sang node kế tiếp.
+  - Ví dụ 2 cách in list:
+    ```cpp
+    #include <iostream>
+    #include <list>
+    using namespace std;
+
+    int main(){
+        list <int> arr = {1, 4, 6, 3, 9};
         
+        for(int i : arr)
+            cout << i << endl;
         
-        | Access Modifier
-        Base Class | Access Modifier
-        Derived Class |
-        | --- | --- |
-        | Public | Protected |
-        | Protected | Protected |
-        | Private | Private |
-    - **Private:**
+      return 0;
+    }
+    ```
+    ```cpp
+    #include <iostream>
+    #include <list>
+    using namespace std;
+
+    int main(){
+        list <int> arr = {1, 4, 6, 3, 9};
         
+        for(list<int>::iterator it = arr.begin(); it != arr.end(); it++)
+            cout << *it << endl;
         
-        | Access Modifier
-        Base Class | Access Modifier
-        Derived Class |
-        | --- | --- |
-        | Public | Private |
-        | Protected | Private |
-        | Private | Private |
-- Ghi đè Method (phương thức): có một Method cùng tên mà Base Class và Derived Class lại có tham số và lệnh trong Method đó là khác nhau → Ta cần ghi đè Method đó cho phù hợp với từng Derived Class (Lớp con).
+      return 0;
+    }
+    ```
+  </details>
 
+  <details>
+  <summary><h2>Map</h2></summary>
 
-</details>
+  - Thư viện: `#include <map>`
+  - Map sẽ đi theo 1 cặp: key & value
+  - Cú pháp: map <<key>, <value>> <tên biến>
+  - Ví dụ:
+    ```cpp
+    #include <iostream>
+    #include <map>
+    #include <string>
 
-<details>
-<summary><h3>Tính đa hình (polymorphism)</h3></summary>
+    using namespace std;
 
-- Là một **Method** (phương thức) có thể có một tên nhưng định nghĩa nhiều lần với nhiều **Input Parameter** khác nhau.
-- Lúc này chương trình sẽ tìm đến **Method** có **Input Parameter** phù hợp nhất để chạy chương trình.
+    typedef struct{
+        string ten;
+        int tuoi;
+    }ThongTin;
 
-</details>
+    int main()
+    {
+        map<int, ThongTin> SinhVien;
+        
+        SinhVien[101] = {"Hoang", 20};
+        SinhVien[102] = {"Tuan", 18};
+        SinhVien[103] = {"Quan", 21};
 
-</details>
+        for(auto item : SinhVien){
+            cout << "ID = " << item.first << ", Ten: " << item.second.ten << ", Tuoi: " << item.second.tuoi << endl;
+        }
+
+        return 0;
+    }
+    ```
+  </details>
+
+  <details>
+  <summary><h2>Lamda</h2></summary>
+
+  - Là 1 function cục bộ
+  - Cú pháp: `[<tham số biến cục bộ>](<biến tham số>)→<KDL trả về> {//code}`
+  - Ví dụ:
+    ```cpp
+    #include <iostream>
+
+    using namespace std;
+
+    int main()
+    {
+        int x = 20;
+        float y = 2.6;
+        
+        auto tong = [=](int a, int b)->void{
+            cout << "x = " << x << endl;
+            cout << "y = " << y << endl;
+            cout << "Tong " << a << " va " << b << ": " << a+b << endl;
+        };
+        tong(7, 9);
+
+        return 0;
+    }
+    ```
+  </details>
 
 </details>
 
@@ -1406,10 +1694,10 @@ LOP: 9A5
 <details>
 <summary><h1>Embedded</h1></summary>
 
-<details>
-<summary><h2>SPI</h2></summary>
+  <details>
+  <summary><h2>SPI</h2></summary>
 
 
-</details>
+  </details>
 
 </details>
