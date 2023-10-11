@@ -1178,15 +1178,23 @@ printf("không có dòng vi điều khiển phù hợp");
 <details>
 <summary><h2>Function</h2></summary>
 
-- Khi mở nguồn sẽ vào địa chỉ 0x00 khởi tạo program counter -> stack pointer
-- Program counter: bộ đếm (chỉ đếm và đọc giá trị) lấy giá trị hiện tại tăng 4 ô nhớ và đọc giá trị
-- Stack pointer: bộ nhớ để lưu địa chỉ.
-- Cách hoạt động:
-  - Đầu tiên chương trình sẽ chạy các lệnh một cách tuần tự từ địa chỉ thấp đến địa chỉ cao.
-  - Khi gặp phải hàm thì `Stack Pointer` sẽ lưu địa chỉ tiếp theo của dòng lệnh trước khi vào hàm.
-  - Sau đó `Program Counter` sẽ chạy từ địa chỉ đầu tiên đến địa chỉ kết thúc của hàm.
-  - Sau đó `Program Pointer` sẽ lấy địa chỉ đã lưu của `Stack Pointer` (địa chỉ tiếp theo của dòng lệnh trước khi chạy vào hàm) từ đó chạy tiếp chương trình.
-  - Thực hiện lặp lại như vậy cho đến khi kết thúc chương trình.
+- Giả sử MCU có kiến trúc 32 bit
+- Bước 1: Chạy từ địa chỉ 0x00 (Top of Stack) đến 0x04 (Reset Handler) Reset Handler sẽ khởi tạo:
+  - Program Counter: Bộ đếm + đọc giá trị.
+  - Stack Pointer: Bộ nhớ (lưu địa chỉ tiếp theo của Program Counter)
+- Bước 2: Chương trình cứ tiếp tục thực thi các câu lệnh từ địa chỉ thấp đến địa chỉ cao. Đến khi gặp hàm.
+- Bước 3: Khi gặp hàm, Program Counter sẽ lưu địa chỉ hàm và nhảy đến địa chỉ đó để thực hiện lệnh. Lúc đó Stack Pointer sẽ lưu địa chỉ tiếp theo của Program Counter trước khi Program Counter nhảy đến hàm.
+- Bước 4: Sau khi thực hiện xong tất cả các lệnh trong hàm. Program Counter sẽ lấy địa chỉ mà Stack Pointer đang giữ và cho vào chương trình. Chương trình sẽ chạy tiếp các lệnh tiếp theo, lệnh trước khi Program Counter nhảy đến hàm.
+
+**So sánh Function và Marco Function:**
+|             | Function      | Macro Function   |
+|---|---|---|
+| Ưu điểm     | Ít tốn bộ nhớ | Tốc độ nhanh     |
+| Khuyết điểm | Tốc độ chậm   | Tốn nhiều bộ nhớ |
+
+**Inline Function**
+- Chương trình sẽ build Inline Function ra thành mã Assembly. Sau đó dán mã Assembly đó vào đoạn chương trình.
+- Vậy nên kích thước chương trình sẽ lớn nhưng tốc độ nhanh hơn.
 </details>
 </details>
 
