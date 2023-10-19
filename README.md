@@ -1178,6 +1178,7 @@ printf("không có dòng vi điều khiển phù hợp");
 <details>
 <summary><h2>Function</h2></summary>
 
+**Cách hoạt động của Function:**
 - Giả sử MCU có kiến trúc 32 bit
 - Bước 1: Chạy từ địa chỉ 0x00 (Top of Stack) đến 0x04 (Reset Handler) Reset Handler sẽ khởi tạo:
   - Program Counter: Bộ đếm + đọc giá trị.
@@ -1195,6 +1196,7 @@ printf("không có dòng vi điều khiển phù hợp");
 **Inline Function**
 - Chương trình sẽ build Inline Function ra thành mã Assembly. Sau đó dán mã Assembly đó vào đoạn chương trình.
 - Vậy nên kích thước chương trình sẽ lớn nhưng tốc độ nhanh hơn.
+
 </details>
 </details>
 
@@ -1705,7 +1707,432 @@ printf("không có dòng vi điều khiển phù hợp");
   <details>
   <summary><h2>SPI</h2></summary>
 
-
+  - ***Khái niệm:***
+    
+    SPI (Serial Peripheral Interface) là một chuẩn truyền thông nối tiếp tốc độ cao do Motorola đề xuất.
+    
+    - Các bit dữ liệu được truyền nối tiếp nhau và có xung clock đồng bộ.
+    - Giao tiếp song công, có thể truyền và nhận cùng một thời điểm.
+    - Khoảng cách truyền ngắn, được sử dụng để trao đổi dữ liệu với nhau giữa các chip trên cùng một bo mạch.
+    - Tốc độ truyền khoảng vài Mb/s.
+    - Các dòng vi điều khiển thường được tích hợp module giao tiếp SPI dùng để giao tiếp truyền dữ liệu với các vi điều khiển khác, hoặc giao tiếp với các ngoại vi bên ngoài như cảm biến, EEPROM, ADC, LCD, SD Card,…
+        
+- ***Cấu tạo:***
+    
+    Bus SPI gồm có 4 đường tín hiệu:
+    
+    - **SCK**: Serial Clock
+    - **MOSI**: Master Out, Slave In
+    - **MISO**: Master In, Slave Out
+    - **SS**: Slave Select
+- ***Cách truyền và nhận dữ liệu:***
+    - Mỗi chip Master hay Slave sẽ có một thanh ghi dữ liệu 8 bit chứa dữ liệu cần gửi đi hoặc dữ liệu nhận về.
+    - Cứ mỗi xung nhịp do Master tạo ra trên chân SCK, một bit trong thanh ghi dữ liệu của Master được truyền qua Slave trên đường MOSI, đồng thời một bit trong thanh ghi dữ liệu của Slave cũng được truyền qua cho Master trên đường MISO.
+    
+- ***Chế độ truyền:***
+    - SPI có 4 chế độ hoạt động phụ thuộc vào cực của xung giữ (Clock Polarity – CPOL) và pha (Phase - CPHA).
+    - CPOL dùng để chỉ trạng thái của chân SCK ở trạng thái nghỉ. Chân SCK giữ ở mức cao khi CPOL=1 hoặc mức thấp khi CPOL=0.
+    - CPHA dùng để chỉ cách mà dữ liệu được lấy mẫu theo xung. Dữ liệu sẽ được lấy ở cạnh lên của SCK khi CPHA=0 hoặc cạnh xuống khi CPHA=1.
+    
+    | Mode | CPOL | CPHA |
+    | --- | --- | --- |
+    | 1 | 0 | 0 |
+    | 2 | 0 | 1 |
+    | 3 | 1 | 0 |
+    | 4 | 1 | 1 |
+    
+    
+    - Mode 0 (mặc định) – xung nhịp của đồng hồ ở mức thấp (CPOL = 0) và dữ liệu được lấy mẫu khi chuyển từ thấp sang cao (cạnh lên) (CPHA = 0).
+    - Mode 1 - xung nhịp của đồng hồ ở mức thấp (CPOL = 0) và dữ liệu được lấy mẫu khi chuyển từ cao sang thấp (cạnh xuống) (CPHA = 1).
+    - Mode 2 - xung nhịp của đồng hồ ở mức cao (CPOL = 1) và dữ liệu được lấy mẫu khi chuyển từ cao sang thấp (cạnh lên) (CPHA = 0).
+    - Mode 3 - xung nhịp của đồng hồ ở mức cao (CPOL = 1) và dữ liệu được lấy mẫu khi chuyển từ thấp sang cao (cạnh xuông) (CPHA = 1).
+    
+    **Lưu ý:** Khi giao tiếp SPI giữa vi điều khiển và các thiết bị ngoại vi khác như IC, cảm biến thì 2 bên bắt buộc hoạt động cùng Mode, nếu không dữ liệu truyền nhận có thể bị đọc sai.
+    
+- ***Các sơ đồ kết nối giao tiếp SPI:***
+    - 1 thiết bị Master và 1 thiết bị Slave
+        
+    - 1 thiết bị Master và nhiều thiết bị Slave ( chế độ độc lập - Independent):
+    
+    Ở chế độ này, mỗi thiết bị Slave kết nối với Master được quy định riêng bởi những chân SS khác nhau. Khi thiết bị Master muốn giao tiếp với Slave nào thì kéo chân SS tương ứng xuống mức 0, những chân SS còn lại giữ ở mức 1.
+    
+    
+    - 1 thiết bị Master và nhiều thiết bị Slave ( chế độ dây chuyền - Daisy):
+    
+    Thử tưởng tượng có bạn cần kết nối SPI với nhiều thiết bị, nếu dùng cách trên thì sẽ tốn nhiều chân SS của vi điều khiển. Thay vào đó chúng ta có thể kết nối các thiết bị Slave theo kiểu dây chuyển như bên dưới mà chỉ cần 1 chân SS từ vi điều khiển. Chân MOSI của Slave này sẽ nối với MISO của Slave tiếp theo.
+    
+    Dữ liệu gửi từ vi điều khiển ( hay thiết bị Master), đi vào Slave 1 bằng đường MOSI. Sau đó lại đi ra từ chân MISO của Slave 1, gửi tới chân MOSI của Slave 2, và cứ tiếp tục như vậy,.... Các bạn có thể thấy cách hoạt động này khác giống với các IC dịch.
+    
   </details>
+
+  <details>
+  <summary><h2>I2C</h2></summary>
+
+  - ***Khái niệm:***
+    - I2C ( Inter – Integrated Circuit) là 1 giao thức giao tiếp nối tiếp đồng bộ được phát triển bởi Philips Semiconductors.
+    - I2C chỉ sử dụng hai dây để truyền dữ liệu giữa các thiết bị:
+        - SDA (Serial Data) - đường truyền cho master và slave để gửi và nhận dữ liệu.
+        - SCL (Serial Clock) - đường mang tín hiệu xung nhịp.
+    - I2C là một giao thức truyền thông nối tiếp, vì vậy dữ liệu được truyền từng bit dọc theo một đường duy nhất (đường SDA).
+    - I2C là đồng bộ, do đó đầu ra của các bit được đồng bộ hóa với việc lấy mẫu các bit bởi một tín hiệu xung nhịp được chia sẻ giữa master và slave. Tín hiệu xung nhịp luôn được điều khiển bởi master.
+- ***Cấu tạo:***
+    
+    I2C sử dụng 2 đường truyền tín hiệu:
+    
+    - **SCL** -  Serial Clock Line : Tạo xung nhịp đồng hồ do Master phát đi
+    - **SDA** - Serial Data Line : Đường truyền nhận dữ liệu.
+    - Và 2 điện trờ ( từ 1 – 4,7 kΩ) để nối lên nguồn để giữ 2 dây ở mức cao
+    
+    
+- ***Khung truyền I2C:***
+    
+    Với I2C, dữ liệu được truyền trong các tin nhắn. Tin nhắn được chia thành các khung dữ liệu. Mỗi tin nhắn có một khung địa chỉ chứa địa chỉ nhị phân của địa chỉ slave và một hoặc nhiều khung dữ liệu chứa dữ liệu đang được truyền. Thông điệp cũng bao gồm điều kiện khởi động và điều kiện dừng, các bit đọc / ghi và các bit ACK / NACK giữa mỗi khung dữ liệu:
+    
+    
+    **Start Condition:** Đường SDA chuyển từ mức điện áp cao xuống mức điện áp thấp trước khi đường SCL chuyển từ mức cao xuống mức thấp.
+    
+    **Stop Condition:** Đường SDA chuyển từ mức điện áp thấp sang mức điện áp cao sau khi đường SCL chuyển từ mức thấp lên mức cao.
+    
+    **Address Frame:** Một chuỗi 7 hoặc 10 bit duy nhất cho mỗi slave để xác định slave khi master muốn giao tiếp với nó. 
+    
+    - Nếu địa chỉ phù hợp, Slave sẽ gửi lại một bit ACK điện áp thấp cho master.
+    - Nếu địa chỉ không khớp, slave không làm gì cả và đường SDA vẫn ở mức cao.
+    
+    **Read/Write bit:** Một bit duy nhất ở cuối tin nhắn cho slave biết master đang 
+    
+    **gửi** dữ liệu đến slave (mức điện áp **thấp**)
+    
+    **yêu cầu** dữ liệu từ nó (mức điện áp **cao**).
+    
+    **Bit ACK / NACK:** Mỗi khung trong một tin nhắn được theo sau bởi một bit xác nhận / không xác nhận. Nếu một khung địa chỉ hoặc khung dữ liệu được nhận thành công, một bit ACK sẽ được trả lại cho thiết bị gửi từ thiết bị nhận.
+    
+    **Data:**
+    
+    Sau khi master phát hiện bit ACK từ slave, data đã sẵn sàng được gửi.
+    
+    Khung dữ liệu luôn có độ dài 8 bit và được gửi với bit quan trọng nhất trước. Mỗi khung dữ liệu ngay sau đó là một bit ACK / NACK để xác minh rằng khung đã được nhận thành công. Bit ACK phải được nhận bởi master hoặc slave (tùy thuộc vào cái nào đang gửi dữ liệu) trước khi khung dữ liệu tiếp theo có thể được gửi.
+    
+    Sau khi tất cả các khung dữ liệu đã được gửi, master có thể gửi một điều kiện dừng cho slave để tạm dừng quá trình truyền. Điều kiện dừng là sự chuyển đổi điện áp từ thấp lên cao trên đường SDA sau khi chuyển tiếp từ thấp lên cao trên đường SCL , với đường SCL vẫn ở mức cao.
+    
+- ***Quá trình truyền nhận dữ liệu:***
+    1. Master gửi điều kiện khởi động đến mọi slave được kết nối bằng cách chuyển đường SDA từ mức điện áp cao sang mức điện áp thấp trước khi chuyển đường SCL từ mức cao xuống mức thấp.
+    2. Master gửi cho mỗi slave địa chỉ 7 hoặc 10 bit của slave mà nó muốn giao tiếp, cùng với bit đọc / ghi.
+    3. Mỗi slave sẽ so sánh địa chỉ được gửi từ master với địa chỉ của chính nó. Nếu địa chỉ trùng khớp, slave sẽ trả về một bit ACK bằng cách kéo dòng SDA xuống thấp cho một bit. Nếu địa chỉ từ master không khớp với địa chỉ của slave, slave rời khỏi đường SDA cao.
+    4. Master gửi hoặc nhận khung dữ liệu.
+    5. Sau khi mỗi khung dữ liệu được chuyển, thiết bị nhận trả về một bit ACK khác cho thiết bị gửi để xác nhận đã nhận thành công khung.
+    6. Để dừng truyền dữ liệu, master gửi điều kiện dừng đến slave bằng cách chuyển đổi mức cao SCL trước khi chuyển mức cao SDA.
+- ***Các chế độ hoạt động của I2C:***
+    - Chế độ chuẩn (standard mode) với tốc độ 100 kBit/s.
+    - Chế độ tốc độ thấp (low speed mode) với tốc độ 10 kBit/s.
+    
+    Ngoài ra, khác với giao tiếp SPI chỉ có thể có 1 Master, giao tiếp I2C cho phép chế độ truyền nhận dữ liệu giữa nhiều thiết bị Master khác nhau với thiết bị Slave. Tuy nhiên quá trình này có hơi phức tạp vì thiết bị Slave có thể nhận 1 lúc nhiều khung dữ liệu từ các thiết bị Master khác nhau, điều đó đôi khi dẫn đến xung đột hoặc sai sót dữ liệu nhận được.
+    
+    Để tránh điều đó, khi làm việc ở chế độ này, mỗi thiết bị Master cần phát hiện xem đường SDA đang ở trạng thái nào.
+    
+    Nếu SDA ở mức 0, nghĩa là đang có 1 thiết bị Master khác đang có quyền điều khiển và phải chờ đến khi truyền xong.
+    
+    Ngược lại nếu SDA ở mức 1, nghĩa là đường truyền SDA đã an toàn và có sử dụng .
+  </details>
+
+  <details>
+  <summary><h2>UART</h2></summary>
+
+  - ***Khái niệm:***
+    
+    UART hay bộ thu-phát không đồng bộ đa năng là một trong những hình thức giao tiếp kỹ thuật số giữa thiết bị với thiết bị đơn giản và lâu đời nhất. Bạn có thể tìm thấy các thiết bị UART trong một phần của mạch tích hợp (IC) hoặc dưới dạng các thành phần riêng lẻ. Các UART giao tiếp giữa hai nút riêng biệt bằng cách sử dụng một cặp dẫn và một nối đất chung.
+    
+    
+- ***Hướng dẫn giao tiếp UART***
+    
+    Vì nó là thiết lập phổ quát nên chúng ta có thể định cấu hình UART để hoạt động với nhiều loại giao thức nối tiếp khác nhau. UART đã được điều chỉnh thành các đơn vị chip đơn vào đầu những năm 1970, bắt đầu với Western Digital’s WD1402A.
+    
+    Trong một sơ đồ giao tiếp UART:
+    
+    1. Chân Tx (truyền) của một chip kết nối trực tiếp với chân Rx (nhận) của chip kia và ngược lại. Thông thường, quá trình truyền sẽ diễn ra ở 3.3V hoặc 5V. UART là một giao thức một master, một slave, trong đó một thiết bị được thiết lập để giao tiếp với duy nhất một thiết bị khác.
+    2. Dữ liệu truyền đến và đi từ UART song song với thiết bị điều khiển (ví dụ: CPU).
+    3. Khi gửi trên chân Tx, UART đầu tiên sẽ dịch thông tin song song này thành nối tiếp và truyền đến thiết bị nhận.
+    4. UART thứ hai nhận dữ liệu này trên chân Rx của nó và biến đổi nó trở lại thành song song để giao tiếp với thiết bị điều khiển của nó.
+- ***Chế độ truyền:***
+    
+    UART truyền dữ liệu nối tiếp, theo một trong ba chế độ:
+    
+    - Full duplex: Giao tiếp đồng thời đến và đi từ mỗi master và slave
+    - Half duplex: Dữ liệu đi theo một hướng tại một thời điểm
+    - Simplex: Chỉ giao tiếp một chiều
+- ***UART Frame:***
+    
+    Dữ liệu truyền qua UART được tổ chức thành các gói. Mỗi gói chứa 1 bit bắt đầu, 5 đến 9 bit dữ liệu (tùy thuộc vào UART), một bit chẵn lẻ tùy chọn và 1 hoặc 2 bit dừng.
+    
+    
+    ***Bit bắt đầu***
+    
+    Đường truyền dữ liệu UART thường được giữ ở mức điện áp cao khi không truyền dữ liệu. Để bắt đầu truyền dữ liệu, UART truyền sẽ kéo đường truyền từ mức cao xuống mức thấp trong một chu kỳ clock. Khi UART nhận phát hiện sự chuyển đổi điện áp cao xuống thấp, nó bắt đầu đọc các bit trong khung dữ liệu ở tần số của tốc độ truyền.
+    
+    ***Khung dữ liệu***
+    
+    Khung dữ liệu chứa dữ liệu thực tế được chuyển. Nó có thể dài từ 5 bit đến 8 bit nếu sử dụng bit chẵn lẻ. Nếu không sử dụng bit chẵn lẻ, khung dữ liệu có thể dài 9 bit. Trong hầu hết các trường hợp, dữ liệu được gửi với bit ít quan trọng nhất trước tiên.
+    
+    ***Bit chẵn lẻ***
+    
+    Bit chẵn lẻ là một cách để UART nhận cho biết liệu có bất kỳ dữ liệu nào đã thay đổi trong quá trình truyền hay không. Bit có thể bị thay đổi bởi bức xạ điện từ, tốc độ truyền không khớp hoặc truyền dữ liệu khoảng cách xa. Sau khi UART nhận đọc khung dữ liệu, nó sẽ đếm số bit có giá trị là 1 và kiểm tra xem tổng số là số chẵn hay lẻ. Nếu bit chẵn lẻ là 0 (tính chẵn), thì tổng các bit 1 trong khung dữ liệu phải là một số chẵn. Nếu bit chẵn lẻ là 1 (tính lẻ), các bit 1 trong khung dữ liệu sẽ tổng thành một số lẻ. Khi bit chẵn lẻ khớp với dữ liệu, UART sẽ biết rằng quá trình truyền không có lỗi. Nhưng nếu bit chẵn lẻ là 0 và tổng là số lẻ; hoặc bit chẵn lẻ là 1 và tổng số là chẵn, UART sẽ biết rằng các bit trong khung dữ liệu đã thay đổi.
+    
+    ***Bit dừng***
+    
+    Để báo hiệu sự kết thúc của gói dữ liệu, UART gửi sẽ điều khiển đường truyền dữ liệu từ điện áp thấp đến điện áp cao trong ít nhất khoảng 2 bit.
+    
+    ***Tóm tắt:***
+    
+    Quá trình truyền dữ liệu diễn ra dưới dạng các gói dữ liệu, bắt đầu bằng một bit bắt đầu, đường mức cao được kéo xuống đất. Sau bit bắt đầu, năm đến chín bit dữ liệu truyền trong khung dữ liệu của gói, theo sau là bit chẵn lẻ tùy chọn để xác minh việc truyền dữ liệu thích hợp. Cuối cùng, một hoặc nhiều bit dừng được truyền ở nơi đường đặt ở mức cao. Như vậy là kết thúc một gói.
+    
+
+  UART là giao thức không đồng bộ, do đó không có đường clock nào điều chỉnh tốc độ truyền dữ liệu. Người dùng phải đặt cả hai thiết bị để giao tiếp ở cùng tốc độ. Tốc độ này được gọi là tốc độ truyền, được biểu thị bằng bit trên giây hoặc bps. Tốc độ truyền thay đổi đáng kể, từ 9600 baud đến 115200 và hơn nữa. Tốc độ truyền giữa UART truyền và nhận chỉ có thể chênh lệch khoảng 10% trước khi thời gian của các bit bị lệch quá xa.
+
+  Mặc dù UART là giao thức cũ và chỉ có thể giao tiếp giữa một master và slave duy nhất, nhưng nó dễ thiết lập và cực kỳ linh hoạt. Do đó, bạn có thể gặp nó khi làm việc với các dự án vi điều khiển. UART có thể là một phần của hệ thống mà bạn sử dụng hàng ngày, mà có thể bạn không nhận ra.
+
+- ***Ưu điểm***
+    - Chỉ sử dụng hai dây
+    - Không cần tín hiệu clock
+    - Có một bit chẵn lẻ để cho phép kiểm tra lỗi
+    - Cấu trúc của gói dữ liệu có thể được thay đổi miễn là cả hai bên đều được thiết lập cho nó
+    - Phương pháp có nhiều tài liệu và được sử dụng rộng rãi
+- ***Nhược điểm***
+    - Kích thước của khung dữ liệu được giới hạn tối đa là 9 bit
+    - Không hỗ trợ nhiều hệ thống slave hoặc nhiều hệ thống master
+    - Tốc độ truyền của mỗi UART phải nằm trong khoảng 10% của nhau
+- **Lưu ý:**
+    - UART là giao thức không đồng bộ, do đó không có đường clock nào điều chỉnh tốc độ truyền dữ liệu.
+    - Người dùng phải đặt cả hai thiết bị để giao tiếp ở cùng tốc độ. Tốc độ này được gọi là tốc độ truyền, được biểu thị bằng bit trên giây hoặc bps.
+    - Tốc độ truyền giữa UART truyền và nhận chỉ có thể chênh lệch khoảng 10% trước khi thời gian của các bit bị lệch quá xa.
+    
+   </details>
+
+  <details>
+  <summary><h2>INTERRUPT</h2></summary>
+
+- là một số sự kiện khẩn cấp bên trong hoặc bên ngoài bộ vi điều khiển xảy ra, buộc vi điều khiển tạm dừng thực hiện chương trình hiện tại, phục vụ ngay lập tức nhiệm vụ mà ngắt yêu cầu – nhiệm vụ này gọi là trình phục vụ ngắt (**ISR:** Interrupt Service Routine).
+
+Trình phục vụ ngắt:
+
+- Đối với mỗi ngắt thì phải có một **trình phục vụ ngắt** (**ISR**) hay trình quản lý ngắt để đưa ra nhiệm vụ cho bộ vi điều khiển khi được gọi ngắt.
+- Khi một ngắt timer xảy ra, MCU sẽ tạm dừng thực hiện chương trình hiện tại và nhảy đến **Trình phục vụ ngắt** của ngắt đó. Và thực hiện lệnh trong **Trình phục vụ ngắt**
+- Đối với mỗi ngắt thì có một vị trí cố định trong bộ nhớ để giữ địa chỉ **ISR** của nó.
+- Số thứ tự ngắt càng thấp thì độ ưu tiên càng cao
+- Ngắt có 4 loại:
+    - reset: Ngắt reset là một loại ngắt nội xảy ra khi MCU nhận được một tín hiệu reset. Ngắt reset thường được sử dụng để khởi động lại MCU hoặc khôi phục MCU về trạng thái ban đầu.
+    - ngoài: Ngắt ngoài là một loại ngắt xảy ra khi một sự kiện bên ngoài MCU xảy ra, chẳng hạn như nhấn nút, đọc cảm biến, v.v. Ngắt ngoài thường được sử dụng để phản ứng với các sự kiện từ thế giới thực.
+    - timer: Ngắt timer là một loại ngắt nội xảy ra khi một bộ đếm thời gian đếm đến giá trị đã định. Ngắt timer thường được sử dụng để tạo ra các khoảng thời gian định kỳ, chẳng hạn như để điều khiển các thiết bị ngoại vi hoặc thực hiện các tác vụ lặp đi lặp lại.
+    - Ngắt truyền thông là một loại ngắt xảy ra khi có một sự kiện liên quan đến giao tiếp xảy ra, chẳng hạn như nhận được một byte dữ liệu hoặc hoàn thành một giao tiếp. Ngắt truyền thông thường được sử dụng để xử lý các sự kiện truyền thông một cách kịp thời và hiệu quả.
+
+Cấu hình Config 1 timer: (4 bước)
+
+- **Timer base config:** Chọn bộ chia (nếu tốc độ cần đếm không quá nhỏ thì nên sử dụng bộ chia)
+- **Xóa cờ tràn** (xóa trước khi dùng cho chắc chắn vì nếu cờ tràn sẽ xảy ra ngắt)
+- **Đăng ký timer ngắt** (đăng ký timer nào thì timer đó mới bật ngắt)
+- **Enable interrupt:** cho phép ngắt hoạt động (ngắt nào đã đc đăng ký thì bật cái này lên mới hoạt động)
+- **Enable timer:** là cho phép tim4 bắt đầu đếm
+   </details>
+
+  <details>
+  <summary><h2>CAN</h2></summary>
+
+- **Khái niệm**
+    
+    Controller Area Network (CAN hoặc CAN Bus) là công nghệ mạng nối tiếp, tốc độ cao, bán song công, hai dây.
+    
+- **Ưu điểm:**
+    - **Đơn giản, chi phí thấp:** bus CAN chỉ có 2 dây giúp kết nối các module điều khiển với nhau dễ dàng hơn khi so sánh với cách làm truyền thống. Kèm theo đó là nhiều lợi ích về việc dễ lắp đặt và dễ sửa chữa, bảo trì khi có sự cố.
+    - **Là 1 một giao thức chung** để nhiều nhà cung cấp khác nhau có thể phát triển các module điều khiển tương thích với nhau
+    - **Tính ưu tiên của thông điệp (Prioritization of messages):** mỗi thông điệp được truyền ra từ một nút (node) hay trạm (station) trên bus CAN đều có mức ưu tiên. Khi nhiều thông điệp được truyền ra bus cùng lúc thì thông điệp có mức ưu tiên cao nhất sẽ được truyền. Cá thông điệp có mức ưu tiên thấp hơn sẽ tạm dừng và được truyền lại khi bus rảnh. Việc xác định mức ưu tiên của thông điệp dựa trên cấu tạo (cấu trúc) thông điệp và cơ chế phân xử quy định trong chuẩn chuẩn CAN.
+    - **Cấu hình linh hoạt:** cho phép thiết lập cấu hình thời gian bit, thời gian đồng bộ, độ dài dữ liệu truyền, dữ liệu nhận, …
+    - **Nhận dữ liệu đa điểm với sự đồng bộ thời gian:** một thông điệp có thể được nhận bởi nhiều node khác nhau trong bus cùng lúc. Tất cả các node trên bus đều có thể thấy thông điệp đang truyền trên bus, tùy vào cấu hình ở mỗi node mà node sẽ quyết định có chấp nhận thông điệp này hay không.
+    Nhiều master (multimaster)
+    - **Phát hiện và báo hiệu lỗi:** Mỗi thông điệp có kèm theo mã CRC (Cyclic Redundancy Code) để thực hiện kiểm tra lỗi. Nếu lỗi xuất hiện, node nhận sẽ bỏ qua thông điệp lỗi và truyền khung báo lỗi (error frame) lên bus CAN. Mỗi node trong bus có bộ đếm quản lý lỗi truyền nhận riêng để xác định trạng thái lỗi của chính nó. Nếu lỗi xuất hiện quá nhiều, một node có thể tự động ngắt khỏi bus. Ngoài ra còn một số dạng lỗi khác có thể được phát hiện với chuẩn CAN.
+    - **Tự động truyền lại các thông điệp bị lỗi khi bus rảnh:** Một thông điệp được truyền ra bus nếu bị lỗi thì sẽ không mất đi mà node truyền thông điệp này sẽ giữ nó lại và tự động phát lại thông điệp này khi bus CAN rảnh cho đến khi thành công. Điều này giúp đảm bảo tính toàn vẹn dữ liệu trong bus
+- **CAN hoạt động như thế nào?**
+    - Trước khi gửi thông điệp, nút CAN sẽ kiểm tra xem bus có bận không.
+    - Nó cũng sử dụng để phát hiện khả năng trùng lặp.
+    - Sau đó sử dụng xác định quyền ưu tiên để xác định Node nào được truyền
+    
+- **Trạng thái “dominant (0)” và “recessive (1)”**
+    - Ở lớp vật lý, Bus CAN định nghĩa hai trạng thái là “dominant” và “recessive”, tương ứng với hai trạng thái là 0 và 1.
+    - Trạng thái “dominant” chiếm ưu thế so với trạng thái “recessive”.
+    - Bus chỉ ở trạng thái “reccessive” khi không có node nào phát đi trạng thái “dominant”.
+    - Điều này tạo ra khả năng giải quyết chanh chấp khi nhiều hơn một Master cùng muốn chiếm quyền sử dụng bus.
+    - Bởi tính chất vật lý của bus, cần thiết phải phân biệt 2 dạng truyền:
+    
+    | Thông số | CAN low speed | CAN high speed |
+    | --- | --- | --- |
+    | Tốc độ | 125kb/s | 125kb/s → 1Mb/s |
+    | Số nút trên Bus | 2 → 20 | 2 → 30 |
+    | Trạng thái dominant | CANH = 4v ; CANL = 1V | CANH = 3.25v ; CANL = 1.5V |
+    | Trạng thái recessive | CANH = 1.75v ; CANL = 3.25V | CANH = 2.5v ; CANL = 2.5V |
+    | Tính chất của cap | 30pF giữa cáp và dây | 2*120 ohm |
+    | Điện áp cung cấp | 5V | 5V |
+    
+- **Các loại CAN Frame (4 loại)**
+    
+    Dữ liệu CAN được truyền dưới dạng các Frame (khung). Có 4 loại Frame khác
+    nhau, đó là:
+    
+    1. **Data Frame** **(khung dữ liệu):** là khung mang dữ liệu từ một bộ truyền dữ
+    liệu đến các bộ nhận dữ liệu. Khung này có vùng để mang các byte dữ
+    liệu.
+    2. **Remote Frame** **(khung yêu cầu hay điều khiển):** là khung được truyền từ
+    một Node bất kỳ để yêu cầu dữ liệu từ Node khác. Khi Node khác đó nhận
+    được yêu cầu sẽ truyền lại dữ liệu có ID (Identifier) trùng với ID được gửi
+    trong Remote Frame.
+    3. **Error Frame (khung lỗi):** là khung được truyền bởi bất kỳ Node nào khi
+    Node đó phát hiện lỗi từ Bus.
+    4. **Overflow Frame** **(khung báo tràn):** mỗi Node trong CAN Bus có thể truyền
+    bất kỳ khi nào nếu phát hiện Bus rảnh. Hoặc nếu một Node nhận quá
+    nhiều dữ liệu và không xử lý kịp, nó sẽ gửi Frame này để các Node khác
+    không gửi thêm dữ liệu cho nó.
+    
+    Data Frame và Remote Frame làm việc theo cơ chế phân xử quyền ưu tiên của tín
+    hiệu vì thế cấu trúc của chúng có vùng phân xử quyền ưu tiên, nơi chứa ID của
+    khung.
+    
+- **Data frame:**
+    
+    ***Có 7 trường trong 1 data frame:***
+    
+    - **Trường bắt đầu khung (Start Of Frame Field – SOF)**
+        - Trường này chiếm 1 bit dữ liệu.
+        - Bit đầu tiên này là một Dominant Bit (mức logic 0) đánh dấu sự bắt đầu của một Data Frame.
+    - **Trường xác định quyền ưu tiên (Arbitration Field)**
+        
+        Bao gồm: 
+        
+        Định dạng vùng xác định quyền ưu tiên là khác nhau đối với dạng khung chuẩn và khung mở rộng:
+        
+        - Định dạng chuẩn: vùng xác định quyền ưu tiên có độ dài 12 bit, bao gồm 11 bit ID và 1 bit RTR.
+        - Định dạng mở rộng: trường xác định quyền ưu tiên có độ dài 32 bit, bao gồm có 29 bit ID, 1 bit SRR, 1 bit IDE và 1 bit RTR
+        
+        **Trong đó:**
+        
+        **Bit RTR (Remote Transmission Request)**
+        
+        - Là bit dùng để phân biệt khung là Data Frame hay Remote Frame.
+        - Nếu là Data Frame, bit này luôn bằng 0 (Dominant Bit).
+        - Nếu là Remote Frame, bit này luôn bằng 1 (Recessive Bit).
+        - Vị trí bit này luôn nằm sau bit ID.
+        - Trường hợp nếu Data Frame và Remote Frame có cùng ID được gửi đi đồng thời thì Data Frame sẽ được ưu tiên hơn.
+        
+        **Bit SRR (Substitute Remote Request)**
+        
+        - Bit này chỉ có ở khung mở rộng.
+        - Bit này có giá trị là 1 (Recessive Bit).
+        - So với vị trí tương ứng trong khung chuẩn thì bit này trùng với vị trí của bit
+        
+        **RTR nên còn được gọi là bit thay thế (Substitute).**
+        
+        - Giả sử có hai Node cùng truyền, một Node truyền Data Frame chuẩn, một Node
+        truyền Data Frame mở rộng có ID giống nhau thì Node truyền khung chuẩn sẽ thắng phân xử quyền ưu tiên vì đến vị trí sau ID, khung chuẩn là bit RTR = 0, còn khung mở rộng là bit SRR = 1. Như vậy, khung chuẩn chiếm ưu thế hơn so với khung mở rộng khi có ID như nhau.
+        
+        **Bit IDE (Identifier Extension)**
+        
+        - Đây là bit phân biệt giữa loại khung chuẩn và khung mở rộng: IDE = 0 quy
+        định khung chuẩn, IDE = 1 quy định khung mở rộng.
+        - Bit này nằm ở trường xác định quyền ưu tiên với khung mở rộng và ở
+        trường điều khiển với khung chuẩn.
+    - **Trường điều khiển (Control Field)**
+        
+        Khung chuẩn và khung mở rộng có định dạng khác nhau ở trường này:
+        
+        Khung chuẩn gồm IDE, r0 và DLC (Data Length Code).
+        
+        Khung mở rộng gồm r1, r0 và DLC.
+        
+        **Trong đó:**
+        
+        **Bit IDE**
+        
+        Dùng phân biệt loại khung (đã được trình bày ở trên).
+        
+        **Bit r0, r1 (hai bit dự trữ)**
+        
+        Tuy hai bit này phải được truyền là Recessive Bit bởi bộ truyền nhưng bộ nhận
+        không quan tâm đến giá trị 2 bit này. Bộ nhận có thể nhận được các tổ hợp 00, 01,
+        10 hoặc 11 của r1 và r0 nhưng không coi đó là lỗi mà bỏ qua và nhận thông điệp
+        bình thường.
+        
+        **DLC (Data Length Code)**
+        
+        - Có độ dài 4 bit quy định số byte của trường dữ liệu của Data Frame
+        - Chỉ được mang giá trị từ 0 đến 8 tương ứng với trường dữ liệu có từ 0 đến
+        8 byte dữ liệu. Data Frame có thể không có byte dữ liệu nào khi DLC = 0.
+        - Giá trị lớn hơn 8 không được phép sử dụng. Hình dưới mô tả các loại mã
+        bit mà DLC có thể chứa để quy định số byte của trường dữ liệu.
+    - **Trường dữ liệu (Data Field)**
+        
+        Trường này có độ dài từ 0 đến 8 byte tùy vào giá trị của DLC ở trường điều khiển.
+        
+    - **Trường kiểm tra (Cyclic Redundancy Check Field – CRC)**
+        
+        Trường kiểm tra hay trường CRC gồm 16 bit và được chia làm hai phần là:
+        
+        - **CRC Sequence:** gồm 15 bit CRC tuần tự
+        - **CRC Delimiter:** là một Recessive Bit làm nhiệm vụ phân cách trường CRC
+        với trường ACK
+        
+        Mã kiểm tra CRC phù hợp nhất cho các khung mà chuỗi bit được kiểm tra
+        có chiều dài dưới 127 bit, mã này thích hợp cho việc phát hiện các trường
+        hợp sai nhóm (Bus Error). Ở đây, tổng bit từ trường bắt đầu (SOF) đến
+        trường dữ liệu (Data Field) tối đa là 83 bit (khung định dạng chuẩn) và 103
+        bit (khung định dạng mở rộng).
+        
+        => Trường CRC bảo vệ thông tin trong Data Frame và Remote Frame bằng cách
+        thêm các bit kiểm tra dự phòng ở đầu khung truyền. Ở đầu khung nhận, cũng sẽ tính
+        toán CRC như bộ truyền khi đã nhận dữ liệu và so sánh kết quả đó với CRC
+        Sequence mà nó đã nhận được, nếu khác nhau tức là đã có lỗi, nếu giống nhau tức
+        là đã nhận đúng từ trường SOF đến trường dữ liệu.
+        
+    - **Trường báo nhận (Acknowledge Field – ACK)**
+        
+        Trường báo nhận hay trường ACK có độ dài 2 bit và bao gồm hai phần là ACK Slot
+        và ACK Delimiter.
+        
+        - **ACK Slot:** có độ dài 1 bit, một Node truyền dữ liệu sẽ thiết lập bit này là
+        Recessive. Khi một hoặc nhiều Node nhận chính xác giá trị thông điệp
+        (không có lỗi và đã so sánh CRC Sequence trùng khớp) thì nó sẽ báo lại
+        cho bộ truyền bằng cách truyền ra một Dominant Bit ngay vị trí ACK Slot
+        để ghi đè lên Recessive Bit của bộ truyền.
+        - **ACK Delimiter:** có độ dài 1 bit, nó luôn là một Recessive Bit. Như vậy, ta
+        thấy rằng ACK Slot luôn được đặt giữa hai Recessive Bit là CRC Delimiter
+        và ACK Delimiter.
+    - **Trường kết thúc (End Of Frame Field – EOF)**
+        
+        Trường EOF là trường thông báo kết thúc một Data Frame hay Remote Frame.
+        
+        - Trường này gồm 7 Recessive Bit
+    
+- **Cách xét ưu tiên trong CAN khi có nhiều NODE gửi cùng 1 lúc:**
+    
+    CAN sẽ ưu tiên nhận NODE có ID nhỏ nhất (Nhiều bit 0 liên tiếp ở đầu nhất)
+    
+- **Chế độ hoạt động:**
+    
+    1. Configuration mode
+    2. Listen mode:
+    3. Loop back mode
+    4. Disabled mode
+    5. Normal mode
+    6. Error recognition mode
+    
+- **Các loại lỗi:**
+    
+    Bit Error:
+    Lỗi Stuffing( Stuff Error)
+    Lỗi Cyclic Redundancy(CRC Error)
+    Lỗi ACK Delimiter
+    Lỗi Slot ACK (ACK Error)
+    
+- **Quy trình xử lý lỗi trong CAN**
+    1. Lỗi được phát hiện bởi bộ điều khiển CAN (bộ phát hoặc bộ thu).
+    2. Một Error Frame được truyền ngay lập tức.
+    3. Thông điệp bị hủy ở tất cả các nút (tồn tại ngoại lệ).
+    4. Trạng thái của bộ điều khiển CAN được cập nhật.
+    5. Thông điệp được truyền lại. Nếu một số bộ điều khiển cùng gửi thông điệp, trường xác định quyền ưu tiên sẽ được sử dụng như bình thường.
+   </details>
 
 </details>
